@@ -2021,7 +2021,7 @@ function etN(k){for(var i=0;i<ETAP.length;i++){if(ETAP[i][0]===k){return i;}}ret
 function leadFU(){return L('lead').filter(function(l){return l.prox&&l.prox<=TD()&&l.etapa!=='fech'&&l.etapa!=='perd';});}
 function leadForm(l){
   var n=!l;l=l||{id:uid(),nome:'',tel:'',email:'',origem:'',etapa:'contato',valor:'',prox:plusU(2),obs:'',criado:TD()};
-  m2(m2head(n?'Novo contato':l.nome,n?'Funil de vendas':ETAP[etN(l.etapa)][1])+'<div class="fg">'+fld('Nome ou empresa','<input id="ld_nome" value="'+esc(l.nome)+'">')+fld('WhatsApp','<input id="ld_tel" inputmode="tel" value="'+esc(l.tel)+'">')+fld('E-mail','<input id="ld_email" value="'+esc(l.email)+'">')+fld('Como chegou','<select id="ld_origem">'+sOpts(ORIG,l.origem)+'</select>')+fld('Etapa','<select id="ld_etapa">'+sOpts(ETAP.map(function(e){return [e[0],e[1]];}),l.etapa)+'</select>')+fld('Valor estimado (R$)','<input id="ld_valor" inputmode="decimal" value="'+esc(String(l.valor||'').replace('.',','))+'">')+fld('Próximo contato (follow-up)','<input id="ld_prox" type="date" value="'+esc(l.prox||'')+'">')+'</div><div class="sec">'+fld('O que ele precisa / anotações','<textarea id="ld_obs" rows="3">'+esc(l.obs||'')+'</textarea>')+'</div><div class="foot">'+(n?'':delBtn('data-lddel',l.id))+(n||l.cliId?'':'<button class="btn ghost" type="button" data-ldcli="'+l.id+'">Virar cliente</button>')+'<button class="btn" type="button" data-ldsave="'+l.id+'">Salvar</button></div>','lead');
+  m2(m2head(n?'Novo contato':l.nome,n?'Funil de vendas':ETAP[etN(l.etapa)][1])+'<div class="fg">'+fld('Nome ou empresa','<input id="ld_nome" value="'+esc(l.nome)+'">')+fld('WhatsApp','<input id="ld_tel" inputmode="tel" value="'+esc(l.tel)+'">')+fld('E-mail','<input id="ld_email" value="'+esc(l.email)+'">')+fld('Como chegou','<select id="ld_origem">'+sOpts(ORIG,l.origem)+'</select>')+fld('Etapa','<select id="ld_etapa">'+sOpts(ETAP.map(function(e){return [e[0],e[1]];}),l.etapa)+'</select>')+fld('Valor estimado (R$)','<input id="ld_valor" inputmode="decimal" value="'+esc(String(l.valor||'').replace('.',','))+'">')+fld('Próximo contato (follow-up)','<input id="ld_prox" type="date" value="'+esc(l.prox||'')+'">')+'</div><div class="sec">'+fld('O que ele precisa / anotações','<textarea id="ld_obs" rows="3">'+esc(l.obs||'')+'</textarea>')+'</div><div class="foot">'+(n?'':delBtn('data-lddel',l.id))+(n?'':'<button class="btn ghost" type="button" data-ld2orc="'+l.id+'">📄 Fazer orçamento</button>')+(n||l.cliId?'':'<button class="btn ghost" type="button" data-ldcli="'+l.id+'">Só virar cliente</button>')+'<button class="btn" type="button" data-ldsave="'+l.id+'">Salvar</button></div>','lead');
 }
 function vFunil(){
   var ls=L('lead'),fu=leadFU(),tot=function(k){return ls.filter(function(l){return l.etapa===k;}).reduce(function(s,l){return s+num(l.valor);},0);};
@@ -2278,11 +2278,27 @@ function vFunil(){
   '<p class="note" style="margin:0 0 14px">Os orçamentos entram sozinhos: rascunho → Orçamento, enviado → Negociação, aprovado → Fechado, recusado → Perdido. Use "+ Contato" para quem ainda não pediu orçamento.</p>'+
   ETAP.map(function(e,i){var xs=it.filter(function(x){return x.et===e[0];}).sort(function(a,b){return (a.prox||'9').localeCompare(b.prox||'9')||b.valor-a.valor;});
     return '<div class="panel" style="margin-bottom:12px"><h2 style="margin:0 0 4px">'+tag(e[1],e[2])+' <span style="font-size:13px;color:var(--muted)">'+xs.length+(sum(e[0])?' · '+brl(sum(e[0])):'')+(i>=3?' · últimos 60 dias':'')+'</span></h2>'+(xs.length?xs.map(function(x){var late=x.prox&&x.prox<=TD();
-      var bt=x.k==='lead'?(i>0&&i<4?'<button class="btn ghost sm" data-ldmv="'+x.id+':-1" aria-label="Voltar etapa">‹</button>':'')+(i<3?'<button class="btn ghost sm" data-ldmv="'+x.id+':1" aria-label="Avançar etapa">›</button>':''):'';
+      var bt=x.k==='lead'?(i<3?'<button class="btn sm" data-ld2orc="'+x.id+'">Orçamento</button>':'')+(i>0&&i<4?'<button class="btn ghost sm" data-ldmv="'+x.id+':-1" aria-label="Voltar etapa">‹</button>':'')+(i<3?'<button class="btn ghost sm" data-ldmv="'+x.id+':1" aria-label="Avançar etapa">›</button>':''):'';
       var wa=x.cli&&tel(x.cli)?'<a class="btn ghost sm" target="_blank" rel="noopener" href="'+waHref(x.cli,x.k==='orc'?msgFill(fuMsg,x.cli).replace(/"[^"]*"/,'"'+(x.o.titulo||'')+'"'):'Olá, '+String(x.nome).split(' ')[0]+'! Aqui é o David, da Saints Projetos. ')+'">WhatsApp</a>':'';
       return '<div class="pjr"><button type="button" class="pjm" '+(x.k==='orc'?'data-open="orc:'+x.id+'"':'data-ldedit="'+x.id+'"')+'><b>'+esc(x.nome)+(x.valor?' · '+brl(x.valor):'')+'</b><span>'+(x.k==='orc'?'📄 ':'👤 ')+esc(x.sub)+'</span>'+(x.prox?'<span class="'+(late?'bad':'')+'">'+(late?'⚠ Retornar hoje':'Retornar em '+fd(x.prox))+'</span>':'')+'</button><div class="ldbt">'+(x.k==='orc'&&x.o.status==='enviado'?'<button class="btn ghost sm" data-orcfu="'+x.id+'" title="Lembrar daqui a 3 dias úteis">+3 dias</button>':'')+bt+wa+'</div></div>';}).join(''):'<p class="note" style="margin:8px 0 0">Ninguém nesta etapa.</p>')+'</div>';}).join('');
 }
 document.addEventListener('click',function(ev){var b=ev.target.closest&&ev.target.closest('[data-orcfu]');if(!b){return;}var o=clone(D.orc[b.dataset.orcfu]);o.fu=plusU(3);put('orc',o);render();toast('Lembrete para '+fd(o.fu));});
+
+function leadCli(l){
+  if(l.cliId&&D.cli[l.cliId]){return l.cliId;}
+  var tl=digits(l.tel).slice(-9),nm=String(l.nome||'').trim().toLowerCase(),c=L('cli').filter(function(x){return (tl.length>=8&&digits(x.tel).slice(-9)===tl)||(nm&&String(x.nome||'').trim().toLowerCase()===nm);})[0];
+  if(c){return c.id;}
+  var parts=String(l.obs||'').split(' · ');
+  c={id:uid(),nome:l.nome,doc:'',tel:l.tel||'',email:l.email||'',cidade:'',obs:l.obs||'',origem:l.origem||'',criado:TD()};put('cli',c);addLog('Cliente criado a partir do funil: '+l.nome);return c.id;
+}
+function leadToOrc(id){
+  var l=clone(D.lead[id]);if(!l){return;}var cid=leadCli(l);l.cliId=cid;if(l.etapa==='contato'){l.etapa='orc';}put('lead',l);
+  var segs=String(l.obs||'').split(' · ').filter(function(p){return p&&!/^(Prazo|Conheceu por):/i.test(p)&&p!=='Outro';});
+  var tit=(segs[segs.length-1]||'').slice(0,70);
+  m2close();if(ui.modal){closeM();}openM('orc','new');ui.draft.cliId=cid;if(tit&&!ui.draft.titulo){ui.draft.titulo=tit;}renderModal();render();
+  toast('Cliente pronto. Agora é só montar o orçamento.');
+}
+document.addEventListener('click',function(ev){var b=ev.target.closest&&ev.target.closest('[data-ld2orc]');if(!b){return;}ev.preventDefault();leadToOrc(b.dataset.ld2orc);});
 
 /* ===================== v15: pedidos do site -> app (Google Planilhas) ===================== */
 function siteTok(){if(!CFG.siteTok){CFG.siteTok='s'+Array.prototype.map.call(rnd(12),function(x){return ('0'+x.toString(16)).slice(-2);}).join('');saveCfg();}return CFG.siteTok;}
