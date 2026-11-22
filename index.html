@@ -1067,19 +1067,19 @@ function vAcc(){
   return meu+tb+how;
 }
 /* ---------- render principal ---------- */
-var NAV=[['','Visão geral'],['painel','Painel','◔'],['auto','Automação','⚡'],['','Comercial'],['orc','Orçamentos','▤'],['ctr','Contratos','§'],['cli','Clientes','☺'],['srv','Ficha técnica','☰'],['','Operação'],['prj','Projetos','◧'],['rot','Tarefas e rotinas','✓'],['','Financeiro'],['rec','A receber','↓'],['fisc','Fiscal e notas','▣'],['pag','A pagar','↑'],['pj','Equipe PJ','◈'],['','Gestão'],['rel','Relatórios','▥'],['','Análises'],['agenda','Agenda','▦'],['caixa','Fluxo de caixa','≈'],['rent','Rentabilidade','◍'],['radar','Radar de clientes','◎'],['','Conta'],['acc','Acessos','⚿'],['site','Site da Saints Projetos','↗']];
+var NAV=[['','Visão geral'],['painel','Painel','◔'],['auto','Automação','⚡'],['','Comercial'],['orc','Orçamentos','▤'],['ctr','Contratos','§'],['cli','Clientes','☺'],['srv','Ficha técnica','☰'],['','Operação'],['prj','Projetos','◧'],['rot','Tarefas e rotinas','✓'],['','Financeiro'],['rec','A receber','↓'],['fisc','Fiscal e notas','▣'],['pag','A pagar','↑'],['pj','Equipe PJ','◈'],['clt','CLT e encargos','⚖'],['','Gestão'],['rel','Relatórios','▥'],['','Análises'],['agenda','Agenda','▦'],['caixa','Fluxo de caixa','≈'],['rent','Rentabilidade','◍'],['radar','Radar de clientes','◎'],['','Conta'],['acc','Acessos','⚿'],['site','Site da Saints Projetos','↗']];
 var NAVCOL=['prj','rot','agenda','cli','acc','site'];
 var SITE_PADRAO='https://claude.ai/artifact/1mbMGFD48KwDhhGzdR35Fd#play-15dd8cd198dd';
 function siteUrl(){var u=String((CFG&&CFG.site)||SITE_PADRAO||'').trim();if(u&&!/^https?:\/\//i.test(u)){u='https://'+u;}return u;}
 function navOk(k){return ME.adm||NAVCOL.indexOf(k)>=0;}
-var TTL={painel:'Painel',auto:'Automação',orc:'Orçamentos',cli:'Clientes',srv:'Ficha técnica de serviços',prj:'Projetos',rec:'Contas a receber',pag:'Contas a pagar',rel:'Relatórios',rot:'Tarefas e rotinas',ctr:'Contratos',fisc:'Fiscal e notas',ia:'Pergunte ao ERP',agenda:'Agenda',caixa:'Fluxo de caixa projetado',rent:'Rentabilidade e preço',radar:'Radar de clientes',meta:'Metas e capacidade',acc:'Acessos e equipe',pj:'Equipe PJ'};
+var TTL={painel:'Painel',auto:'Automação',orc:'Orçamentos',cli:'Clientes',srv:'Ficha técnica de serviços',prj:'Projetos',rec:'Contas a receber',pag:'Contas a pagar',rel:'Relatórios',rot:'Tarefas e rotinas',ctr:'Contratos',fisc:'Fiscal e notas',ia:'Pergunte ao ERP',agenda:'Agenda',caixa:'Fluxo de caixa projetado',rent:'Rentabilidade e preço',radar:'Radar de clientes',meta:'Metas e capacidade',acc:'Acessos e equipe',pj:'Equipe PJ',clt:'CLT e encargos'};
 function cnt(v){if(v==='orc'){return L('orc').filter(function(o){return o.status==='enviado';}).length;}if(v==='prj'){return L('prj').filter(function(p){return p.status!=='entregue';}).length;}if(v==='rec'){return L('tit').filter(function(t){return t.tipo==='R'&&tstat(t)==='vencido';}).length;}if(v==='rot'){return tdue();}if(v==='ctr'){return L('ctr').filter(function(c){return c.status==='rascunho'||c.status==='enviado';}).length;}if(v==='auto'){return ao('alerta')?pend().length:0;}if(v==='pj'){return L('tit').filter(function(t){return isPJ(t)&&tstat(t)==='pago'&&!t.nf&&!pjNotas(t.id).length;}).length;}return 0;}
 function render(){
   if(!navOk(ui.view)){ui.view='prj';}
   var nv=NAV.filter(function(n){return !n[2]||navOk(n[0]);}).filter(function(n,i,a){return n[2]||(a[i+1]&&a[i+1][2]);});
   $('#nav').innerHTML=nv.map(function(n){if(!n[2]){return '<div class="grp">'+n[1]+'</div>';}if(n[0]==='site'&&siteUrl()){return '<a class="nv" style="text-decoration:none" href="'+esc(siteUrl())+'" target="_blank" rel="noopener"><i>'+n[2]+'</i>'+n[1]+'</a>';}var c=cnt(n[0]);return '<button class="nv" data-nav="'+n[0]+'"'+(ui.view===n[0]?' aria-current="page"':'')+'><i>'+n[2]+'</i>'+n[1]+(c?'<em>'+c+'</em>':'')+'</button>';}).join('');
   $('#ttl').textContent=TTL[ui.view];
-  var v=ui.view;$('#view').innerHTML=v==='painel'?vPainelX():v==='orc'?vOrc():v==='cli'?vCli():v==='srv'?vSrv():v==='prj'?vPrj():v==='rec'?vFin('R'):v==='pag'?vFin('P'):v==='pj'?vPJ():v==='rel'?vRel():v==='rot'?vRot():v==='ctr'?vCtr():v==='fisc'?vFisc():v==='ia'?vIA():v==='agenda'?vAgenda():v==='caixa'?vCaixa():v==='rent'?vRent():v==='radar'?vRadar():v==='meta'?vMeta()+conqHtml(true):v==='acc'?vAcc():vAuto();
+  var v=ui.view;$('#view').innerHTML=v==='painel'?vPainelX():v==='orc'?vOrc():v==='cli'?vCli():v==='srv'?vSrv():v==='prj'?vPrj():v==='rec'?vFin('R'):v==='pag'?vFin('P'):v==='pj'?vPJ():v==='clt'?vCLT():v==='rel'?vRel():v==='rot'?vRot():v==='ctr'?vCtr():v==='fisc'?vFisc():v==='ia'?vIA():v==='agenda'?vAgenda():v==='caixa'?vCaixa():v==='rent'?vRent():v==='radar'?vRadar():v==='meta'?vMeta()+conqHtml(true):v==='acc'?vAcc():vAuto();
   if(!ME.adm){var nb=document.querySelectorAll('[data-new="prj"]');for(var z=0;z<nb.length;z++){nb[z].remove();}}
   renderBanner();tabbarRender();
 }
@@ -1565,7 +1565,7 @@ setInterval(function(){
 },2000);
 
 /* ===================== v10: Equipe PJ, notas fiscais e recibos ===================== */
-function isPJ(t){return t&&t.tipo==='P'&&t.cat==='Pessoal';}
+function isPJ(t){return t&&t.tipo==='P'&&t.cat==='Pessoal'&&!t.clt;}
 function pjRcr(t){return (t.rcr&&D.rcr[t.rcr])||L('rcr').filter(function(r){return r.cat==='Pessoal'&&r.forn===t.forn;})[0]||null;}
 function pjComp(t){return t.comp||(t.venc?addM(mkey(t.venc),-1):mkey(TD()));}
 function pjNotas(id){return L('anx').filter(function(a){return a.ref==='tit:'+id;});}
@@ -1639,6 +1639,142 @@ document.addEventListener('change',function(e){
   toast('Anexando nota…');shrink(f,1400,.7).then(function(u){put('anx',{id:uid(),ref:ref,nome:f.name||'nota.jpg',img:u,d:TD()});toast('Nota anexada');if(ui.modal){renderModal();}render();}).catch(function(){toast('Não consegui abrir esse arquivo.');});
 });
 document.addEventListener('click',function(e){if(e.target.closest('[data-newpj]')){openM('rcr','new');ui.draft.cat='Pessoal';renderModal();}});
+
+/* ===================== v11: CLT, folha, encargos e guias ===================== */
+var T26={sm:1621,inss:[[1621,.075],[2902.84,.09],[4354.27,.12],[8475.55,.14]],
+  ir:[[2428.80,0,0],[2826.65,.075,182.16],[3751.05,.15,394.16],[4664.68,.225,675.49],[1e12,.275,908.73]],
+  dep:189.59,simp:607.20,redMax:312.89,redA:978.62,redB:0.133145,redLim:7350};
+var REGS={
+  mei:{n:'MEI',pat:.03,rat:0,ter:0,dae:true,nota:'MEI pode ter 1 empregado, com salário de até 1 mínimo ou o piso da categoria. INSS, FGTS e IRRF saem numa guia só (DAE do eSocial), até o dia 20.'},
+  sn:{n:'Simples Nacional (Anexos I, II, III ou V)',pat:0,rat:0,ter:0,nota:'A parte patronal do INSS já está dentro do DAS. Você paga à parte só o FGTS (FGTS Digital) e o INSS descontado do funcionário mais o IRRF (DCTFWeb), até o dia 20.'},
+  sn4:{n:'Simples Nacional (Anexo IV)',pat:.20,rat:.02,ter:0,nota:'No Anexo IV o INSS patronal (20%) e o RAT ficam fora do DAS e são pagos pela DCTFWeb, até o dia 20.'},
+  lp:{n:'Lucro Presumido ou Real',pat:.20,rat:.02,ter:.058,nota:'INSS patronal de 20%, RAT e terceiros (Sistema S, salário-educação), pagos pela DCTFWeb até o dia 20, além do FGTS.'}
+};
+function rgk(){return REGS[CFG.regime]?CFG.regime:'mei';}
+function reg(){return REGS[rgk()];}
+function regPat(){var r=reg();return r.pat+(rgk()==='mei'||rgk()==='sn'?0:(CFG.rat!=null?num(CFG.rat)/100:r.rat))+r.ter;}
+function cltL(){return (CFG.clt||[]).slice();}
+function inssEmp(b){var t=0,ant=0;b=Math.min(num(b),T26.inss[3][0]);T26.inss.forEach(function(f){if(b>ant){t+=(Math.min(b,f[0])-ant)*f[1];ant=f[0];}});return Math.round(t*100+1e-6)/100;}
+function irTab(base){for(var i=0;i<T26.ir.length;i++){if(base<=T26.ir[i][0]){return Math.max(0,base*T26.ir[i][1]-T26.ir[i][2]);}}return 0;}
+function irrf(bruto,inss,dep){
+  var b1=bruto-inss-dep*T26.dep,b2=bruto-T26.simp,ir=Math.min(irTab(Math.max(0,b1)),irTab(Math.max(0,b2)));
+  var red=bruto<=5000?T26.redMax:bruto<=T26.redLim?Math.max(0,T26.redA-T26.redB*bruto):0;
+  return r2(Math.max(0,ir-red));
+}
+function diasMes(comp){var y=+comp.slice(0,4),m=+comp.slice(5,7);return new Date(y,m,0).getDate();}
+function cltAtivo(e,comp){var ini=comp+'-01',fim=comp+'-'+('0'+diasMes(comp)).slice(-2);return e.adm&&e.adm<=fim&&!(e.dem&&e.dem<ini);}
+function folhaEmp(e,comp){
+  var sal=num(e.sal),bruto=sal,ini=comp+'-01',fim=comp+'-'+('0'+diasMes(comp)).slice(-2);
+  if(e.adm>ini){var dt=+fim.slice(8)-(+e.adm.slice(8))+1;bruto=r2(sal/30*Math.min(30,dt));}
+  if(e.dem&&e.dem<fim){var dd=+e.dem.slice(8)-(e.adm>ini?+e.adm.slice(8):1)+1;bruto=r2(sal/30*Math.min(30,Math.max(0,dd)));}
+  var inss=inssEmp(bruto),ir=irrf(bruto,inss,num(e.dep)),vt=e.vt?r2(bruto*.06):0;
+  var fgts=r2(bruto*.08),pat=r2(bruto*regPat());
+  return {bruto:bruto,inss:inss,ir:ir,vt:vt,liq:r2(bruto-inss-ir-vt),fgts:fgts,pat:pat};
+}
+function custoMes(e){var f=folhaEmp(e,mkey(TD())),b=num(e.sal),p=regPat(),prov=b*(1/12+1/3/12+1/12);return {f:f,prov:r2(prov),total:r2(b+f.fgts+f.pat+prov*(1+.08+p))};}
+function quintoUtil(comp){var n=addM(comp,1),x=n+'-01',k=0,fer=feriados(+n.slice(0,4));for(;;){var d=new Date(x+'T12:00:00').getDay();if(d!==0&&!fer[x]){k++;if(k===5){break;}}x=plus(1,x);}return isBiz(x)?x:prevBiz(x);}
+function dia20(comp){var n=addM(comp,1);return prevBiz(n+'-20');}
+function meses13(e,ano){var n=0;for(var m=1;m<=12;m++){var c=ano+'-'+('0'+m).slice(-2),ini=c+'-01',fim=c+'-'+('0'+diasMes(c)).slice(-2);if(!e.adm||e.adm>fim||(e.dem&&e.dem<ini)){continue;}var a=e.adm>ini?+e.adm.slice(8):1,z=e.dem&&e.dem<fim?+e.dem.slice(8):+fim.slice(8);if(z-a+1>=15){n++;}}return n;}
+function decimo(e,ano){var me=meses13(e,ano),v=r2(num(e.sal)*me/12),p1=r2(v/2),inss=inssEmp(v),ir=irrf(v,inss,num(e.dep));return {me:me,v:v,p1:p1,inss:inss,ir:ir,p2:r2(v-p1-inss-ir),fgts1:r2(p1*.08),fgts2:r2((v-p1)*.08),pat:r2(v*regPat())};}
+function cltTit(id,o){if(D.tit[id]){return false;}o.id=id;o.tipo='P';o.num=nextNum('PAG');o.clt=true;o.forma=o.forma||'Pix';put('tit',o);return true;}
+function cltGerados(pref){return L('tit').filter(function(t){return t.id.indexOf(pref)===0;});}
+function fecharFolha(comp){
+  var es=cltL().filter(function(e){return cltAtivo(e,comp);});if(!es.length){toast('Nenhum funcionário ativo nesse mês.');return;}
+  var pre='clt_'+comp+'_',ant=cltGerados(pre);
+  if(ant.some(function(t){return pago(t)>0;})){toast('Essa folha já tem pagamentos. Estorne as baixas antes de refazer.');return;}
+  ant.forEach(function(t){del('tit',t.id);});
+  var r=reg(),tot={inss:0,ir:0,fgts:0,pat:0},snap={};
+  es.forEach(function(e){var f=folhaEmp(e,comp);snap[e.id]=f;tot.inss+=f.inss;tot.ir+=f.ir;tot.fgts+=f.fgts;tot.pat+=f.pat;
+    cltTit(pre+'sal_'+e.id,{forn:e.nome,cat:'Pessoal',desc:'Salário '+mlabel(comp)+' · '+e.nome+' (CLT)',valor:f.liq,venc:quintoUtil(comp),comp:comp,forma:'Pix'});});
+  var v20=dia20(comp);
+  if(r.dae){cltTit(pre+'dae',{forn:'Receita Federal / Caixa',cat:'Impostos',desc:'DAE eSocial '+mlabel(comp)+' (INSS + FGTS + IRRF)',valor:r2(tot.inss+tot.pat+tot.fgts+tot.ir),venc:v20,comp:comp,forma:'Boleto'});}
+  else{cltTit(pre+'fgts',{forn:'Caixa (FGTS Digital)',cat:'Impostos',desc:'FGTS Digital '+mlabel(comp),valor:r2(tot.fgts),venc:v20,comp:comp,forma:'Pix'});
+    cltTit(pre+'dctf',{forn:'Receita Federal',cat:'Impostos',desc:'DARF DCTFWeb '+mlabel(comp)+' (INSS'+(tot.pat?' + patronal':'')+(tot.ir?' + IRRF':'')+')',valor:r2(tot.inss+tot.pat+tot.ir),venc:v20,comp:comp,forma:'Boleto'});}
+  CFG.folhas=CFG.folhas||{};CFG.folhas[comp]={d:TD(),snap:snap};saveCfg();
+  addLog('Folha de '+mlabel(comp)+' fechada e lançada no A pagar');render();toast('Folha de '+mlabel(comp)+' lançada no A pagar');
+}
+function lancar13(ano){
+  var es=cltL().filter(function(e){return meses13(e,ano)>0;});if(!es.length){toast('Ninguém com direito a 13º em '+ano+'.');return;}
+  var pre='clt_'+ano+'-13_',r=reg(),g1=0,g2=0,n=0;
+  es.forEach(function(e){var d=decimo(e,ano);
+    if(cltTit(pre+'a_'+e.id,{forn:e.nome,cat:'Pessoal',desc:'13º salário 1ª parcela '+ano+' · '+e.nome,valor:d.p1,venc:prevBiz(ano+'-11-30'),comp:ano+'-11'})){n++;}
+    if(cltTit(pre+'b_'+e.id,{forn:e.nome,cat:'Pessoal',desc:'13º salário 2ª parcela '+ano+' · '+e.nome,valor:d.p2,venc:prevBiz(ano+'-12-20'),comp:ano+'-12'})){n++;}
+    g1+=d.fgts1+d.inss+d.pat;g2+=d.fgts2+d.ir;});
+  var ds=r.dae?'DAE eSocial':'FGTS + DCTFWeb';
+  if(cltTit(pre+'g1',{forn:'Receita Federal / Caixa',cat:'Impostos',desc:'Encargos do 13º '+ano+' ('+ds+': FGTS da 1ª parcela + INSS)',valor:r2(g1),venc:prevBiz(ano+'-12-20'),comp:ano+'-12',forma:'Boleto'})){n++;}
+  if(cltTit(pre+'g2',{forn:'Receita Federal / Caixa',cat:'Impostos',desc:'Encargos do 13º '+ano+' ('+ds+': FGTS da 2ª parcela + IRRF)',valor:r2(g2),venc:prevBiz((+ano+1)+'-01-20'),comp:ano+'-12',forma:'Boleto'})){n++;}
+  render();toast(n?n+' lançamento(s) do 13º criados':'O 13º de '+ano+' já estava lançado');
+}
+function prazosGov(){
+  var r=reg(),out=[],c0=addM(mkey(TD()),-1),temC=cltL().some(function(e){return !e.dem;});
+  for(var i=0;i<3;i++){var c=addM(c0,i),n=addM(c,1),y=+n.slice(0,4);
+    if(temC){out.push([quintoUtil(c),'Salário de '+mlabel(c)+' (5º dia útil)']);
+      out.push([prevBiz(n+'-15'),'eSocial: fechar a folha de '+mlabel(c)]);
+      if(r.dae){out.push([dia20(c),'DAE do eSocial de '+mlabel(c)+' (INSS + FGTS + IRRF)']);}
+      else{out.push([dia20(c),'FGTS Digital de '+mlabel(c)]);out.push([dia20(c),'DCTFWeb de '+mlabel(c)+' (INSS + IRRF)']);}}
+    out.push([prevBiz(n+'-20'),(rgk()==='mei'?'DAS-MEI':rgk()==='lp'?'Impostos federais (DARF)':'DAS do Simples')+' de '+mlabel(c)]);
+  }
+  var y0=+TD().slice(0,4);[y0,y0+1].forEach(function(y){
+    if(temC){out.push([prevBiz(y+'-11-30'),'13º salário: 1ª parcela']);out.push([prevBiz(y+'-12-20'),'13º salário: 2ª parcela']);}
+    if(rgk()==='mei'){out.push([prevBiz(y+'-05-31'),'DASN-SIMEI (declaração anual do MEI)']);}
+    else if(rgk()==='sn'||rgk()==='sn4'){out.push([prevBiz(y+'-03-31'),'DEFIS (declaração anual do Simples)']);}
+  });
+  var h=TD(),lim=plus(75);
+  return out.filter(function(x){return x[0]>=h&&x[0]<=lim;}).sort(function(a,b){return a[0].localeCompare(b[0]);});
+}
+var cltComp=null;
+function vCLT(){
+  if(!cltComp){cltComp=addM(mkey(TD()),+TD().slice(8)>10?0:-1);}
+  var r=reg(),es=cltL(),comp=cltComp,ano=+TD().slice(0,4);
+  var regSel='<div class="panel" style="margin-bottom:14px"><h2>Regime da empresa</h2><div class="fg">'+fld('Regime tributário','<select data-cltreg>'+Object.keys(REGS).map(function(k){return '<option value="'+k+'"'+(rgk()===k?' selected':'')+'>'+REGS[k].n+'</option>';}).join('')+'</select>')+((rgk()==='sn4'||rgk()==='lp')?fld('RAT (%)','<input data-cltrat inputmode="decimal" value="'+esc(String(CFG.rat!=null?CFG.rat:2).replace('.',','))+'">'):'')+'</div><p class="note" style="margin-top:8px">'+esc(r.nota)+'</p><div class="pjk" style="margin-top:12px"><div><small>FGTS</small><b>8%</b></div><div><small>INSS patronal</small><b>'+String(r2(regPat()*100)).replace('.',',')+'%</b></div><div><small>Funcionários</small><b>'+es.filter(function(e){return !e.dem;}).length+'</b></div></div></div>';
+  var func='<div class="panel" style="margin-bottom:14px"><div class="pjh"><div style="flex:1"><h2 style="margin:0">Funcionários CLT</h2></div><button class="btn sm" data-cltnew="1">+ Funcionário</button></div>'+(es.length?es.map(function(e){var c=custoMes(e);return '<div class="pjr"><button type="button" class="pjm" data-cltedit="'+e.id+'"><b>'+esc(e.nome)+(e.dem?' · desligado':'')+'</b><span>'+esc(e.cargo||'')+' · salário '+brl(e.sal)+'</span><span>Custo real por mês ≈ <b>'+brl(c.total)+'</b> (com encargos, férias e 13º)</span></button><button class="btn ghost sm" data-holer="'+e.id+'">Holerite</button></div>';}).join(''):empty('Nenhum funcionário CLT cadastrado. Toque em "+ Funcionário" para começar.'))+'</div>';
+  var at=es.filter(function(e){return cltAtivo(e,comp);}),fs=at.map(function(e){return [e,folhaEmp(e,comp)];});
+  var T={bruto:0,inss:0,ir:0,vt:0,liq:0,fgts:0,pat:0};fs.forEach(function(x){for(var k in T){T[k]+=x[1][k];}});
+  var fech=CFG.folhas&&CFG.folhas[comp],gl=cltGerados('clt_'+comp+'_');
+  var folha='<div class="panel" style="margin-bottom:14px"><div class="pjh"><button class="btn ghost sm" data-cltm="-1" aria-label="Mês anterior">‹</button><div style="flex:1;text-align:center"><h2 style="margin:0">Folha de '+esc(mlong(comp))+'</h2><span>'+(gl.length?'✓ Lançada no A pagar':'Ainda não lançada')+'</span></div><button class="btn ghost sm" data-cltm="1" aria-label="Próximo mês">›</button></div>'+
+    (fs.length?'<div class="tw" style="margin-top:12px"><table><thead><tr><th>Funcionário</th><th class="r">Bruto</th><th class="r">INSS</th><th class="r">IRRF</th><th class="r">V.T.</th><th class="r">Líquido</th><th class="r">FGTS</th><th class="r">Patronal</th></tr></thead><tbody>'+fs.map(function(x){var f=x[1];return '<tr><td><b>'+esc(x[0].nome)+'</b></td><td class="r">'+brl(f.bruto)+'</td><td class="r">'+brl(f.inss)+'</td><td class="r">'+brl(f.ir)+'</td><td class="r">'+brl(f.vt)+'</td><td class="r"><b>'+brl(f.liq)+'</b></td><td class="r">'+brl(f.fgts)+'</td><td class="r">'+brl(f.pat)+'</td></tr>';}).join('')+'</tbody>'+(fs.length>1?'<tfoot><tr><td>Total</td><td class="r">'+brl(T.bruto)+'</td><td class="r">'+brl(T.inss)+'</td><td class="r">'+brl(T.ir)+'</td><td class="r">'+brl(T.vt)+'</td><td class="r">'+brl(T.liq)+'</td><td class="r">'+brl(T.fgts)+'</td><td class="r">'+brl(T.pat)+'</td></tr></tfoot>':'')+'</table></div>'+
+    '<div class="pjk" style="margin-top:12px"><div><small>Salários líquidos</small><b>'+brl(T.liq)+'</b><small>até '+fd(quintoUtil(comp))+'</small></div><div><small>'+(r.dae?'DAE eSocial':'FGTS + DCTFWeb')+'</small><b>'+brl(T.inss+T.ir+T.fgts+T.pat)+'</b><small>até '+fd(dia20(comp))+'</small></div><div><small>Custo do mês</small><b>'+brl(T.bruto+T.fgts+T.pat)+'</b></div></div>'+
+    '<div class="foot" style="margin-top:12px"><button class="btn'+(gl.length?' ghost':'')+'" data-cltfech="'+comp+'">'+(gl.length?'Refazer lançamentos':'Fechar folha e lançar no A pagar')+'</button></div>':empty('Nenhum funcionário ativo neste mês.'))+'</div>';
+  var dec='';
+  if(es.length){var d13=es.map(function(e){return [e,decimo(e,ano)];}).filter(function(x){return x[1].me>0;});
+    if(d13.length){var l13=cltGerados('clt_'+ano+'-13_').length;dec='<div class="panel" style="margin-bottom:14px"><h2>13º salário de '+ano+'</h2>'+d13.map(function(x){var d=x[1];return '<div class="pjr"><div class="pjm" style="cursor:default"><b>'+esc(x[0].nome)+' · '+d.me+'/12 avos · '+brl(d.v)+'</b><span>1ª parcela '+brl(d.p1)+' até '+fd(prevBiz(ano+'-11-30'))+'</span><span>2ª parcela '+brl(d.p2)+' até '+fd(prevBiz(ano+'-12-20'))+' (já desconta INSS '+brl(d.inss)+(d.ir?' e IRRF '+brl(d.ir):'')+')</span></div></div>';}).join('')+'<div class="foot" style="margin-top:12px"><button class="btn'+(l13?' ghost':'')+'" data-clt13="'+ano+'">'+(l13?'✓ Lançado · conferir':'Lançar 13º no A pagar')+'</button></div></div>';}}
+  var pz=prazosGov();
+  var guias='<div class="panel" style="margin-bottom:14px"><h2>Guias e prazos do governo</h2>'+(pz.length?pz.map(function(x){var dd=diff(x[0]);return '<div class="pjr"><div class="pjm" style="cursor:default"><b>'+fd(x[0])+' · '+esc(x[1])+'</b><span class="'+(dd<=5?'bad':'')+'">'+(dd===0?'Vence hoje':dd===1?'Vence amanhã':'Em '+dd+' dias')+'</span></div></div>';}).join(''):empty('Nada nos próximos dias.'))+'<p class="note" style="margin-top:10px">Prazos que caem em fim de semana ou feriado já aparecem antecipados.</p></div>';
+  return regSel+func+folha+dec+guias+'<p class="note">Cálculos de referência com as tabelas de 2026 (INSS até 14%, IRRF com isenção até R$ 5 mil, salário mínimo de R$ 1.621). Confira com seu contador antes de pagar as guias.</p>';
+}
+function holeriteHtml(e,comp){
+  var f=(CFG.folhas&&CFG.folhas[comp]&&CFG.folhas[comp].snap[e.id])||folhaEmp(e,comp),logo='';try{logo=document.querySelector('.brand img').src;}catch(x){}
+  var row=function(a,b,c){return '<tr><td>'+a+'</td><td class="r">'+(b?brl(b):'')+'</td><td class="r">'+(c?brl(c):'')+'</td></tr>';};
+  return '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Holerite '+esc(e.nome)+' '+esc(mlabel(comp))+'</title><style>body{margin:0;background:#EEF0F4;font-family:Arial,sans-serif;color:#0A0A0B}main{max-width:680px;margin:20px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.1)}.h{background:#12141A;color:#fff;padding:20px;display:flex;gap:14px;align-items:center}.h img{width:36px;height:50px;border-radius:8px;background:#000}.h b{font-size:18px;display:block}.h span{color:#A1A1AA;font-size:12px}.c{padding:22px}h1{margin:0;font-size:18px;letter-spacing:.04em}.g{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:13px;margin:14px 0}.g small{color:#71717A;display:block;font-size:11px;text-transform:uppercase}table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}th{text-align:left;font-size:11px;color:#71717A;text-transform:uppercase;border-bottom:2px solid #0A0A0B;padding:6px 0}th.r,.r{text-align:right}td{padding:8px 0;border-bottom:1px solid #E4E4E7}.liq{display:flex;justify-content:space-between;background:#F4F4F5;border-radius:10px;padding:12px 14px;font-size:17px;margin:12px 0}.b{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:12px;color:#52525B}.as{margin-top:48px;border-top:1px solid #0A0A0B;width:280px;padding-top:6px;font-size:13px}.pr{margin:18px 0 0;text-align:center}.pr button{font:inherit;padding:10px 18px;border-radius:10px;border:0;background:#C8102E;color:#fff;font-weight:700}@media print{body{background:#fff}main{box-shadow:none;margin:0}.pr{display:none}}</style></head><body><main><div class="h">'+(logo?'<img alt="" src="'+logo+'">':'')+'<div><b>Saints Projetos</b><span>'+(CFG.cnpj?'CNPJ '+esc(CFG.cnpj):'Projetos técnicos 2D e 3D')+'</span></div></div><div class="c"><h1>RECIBO DE PAGAMENTO DE SALÁRIO</h1><div class="g"><div><small>Funcionário</small>'+esc(e.nome)+'</div><div><small>Competência</small>'+esc(mlong(comp))+'</div><div><small>Cargo</small>'+esc(e.cargo||'—')+'</div><div><small>Admissão</small>'+fd(e.adm)+'</div>'+(e.cpf?'<div><small>CPF</small>'+esc(e.cpf)+'</div>':'')+'</div>'+
+  '<table><thead><tr><th>Descrição</th><th class="r">Proventos</th><th class="r">Descontos</th></tr></thead><tbody>'+row('Salário',f.bruto,0)+row('INSS',0,f.inss)+(f.ir?row('IRRF',0,f.ir):'')+(f.vt?row('Vale-transporte (6%)',0,f.vt):'')+'<tr><td><b>Totais</b></td><td class="r"><b>'+brl(f.bruto)+'</b></td><td class="r"><b>'+brl(f.inss+f.ir+f.vt)+'</b></td></tr></tbody></table>'+
+  '<div class="liq"><span>Valor líquido</span><b>'+brl(f.liq)+'</b></div><div class="b"><div>Base INSS<br><b>'+brl(Math.min(f.bruto,T26.inss[3][0]))+'</b></div><div>Base FGTS<br><b>'+brl(f.bruto)+'</b></div><div>FGTS do mês<br><b>'+brl(f.fgts)+'</b></div><div>Base IRRF<br><b>'+brl(Math.max(0,f.bruto-f.inss))+'</b></div></div>'+
+  '<p style="font-size:13px;margin-top:20px">Declaro ter recebido a importância líquida discriminada neste recibo.</p><div class="as">'+esc(e.nome)+'</div><div class="pr"><button onclick="print()">Imprimir ou salvar em PDF</button></div></div></main></body></html>';
+}
+function cltForm(e){
+  var n=!e;e=e||{id:uid(),nome:'',cpf:'',cargo:'',adm:TD(),sal:'',dep:0,vt:false,dem:''};
+  var I=function(lb,k,v,o){o=o||'';return fld(lb,'<input id="clt_'+k+'" '+o+' value="'+esc(v==null?'':v)+'">');};
+  m2(m2head(n?'Novo funcionário CLT':e.nome,n?'':'CLT')+'<div class="fg">'+I('Nome completo','nome',e.nome)+I('CPF','cpf',e.cpf,'inputmode="numeric"')+I('Cargo','cargo',e.cargo)+I('Salário bruto (R$)','sal',String(e.sal||'').replace('.',','),'inputmode="decimal"')+I('Data de admissão','adm',e.adm,'type="date"')+I('Dependentes para IR','dep',e.dep||0,'inputmode="numeric"')+I('Desligamento (se houver)','dem',e.dem||'','type="date"')+fld('Vale-transporte','<select id="clt_vt"><option value="0">Não desconta</option><option value="1"'+(e.vt?' selected':'')+'>Desconta 6%</option></select>')+'</div>'+(rgk()==='mei'?'<p class="note" style="margin-top:8px">MEI: no máximo 1 funcionário, com salário de até 1 mínimo (R$ 1.621) ou o piso da categoria.</p>':'')+'<p class="note" style="margin-top:8px">Em caso de desligamento, a rescisão (aviso, férias e multa do FGTS) deve ser calculada pelo contador.</p><div class="foot">'+(n?'':'<button class="btn ghost" type="button" data-cltdel="'+e.id+'" style="color:var(--bad);border-color:var(--bad)">Excluir</button>')+'<button class="btn" type="button" data-cltsave="'+e.id+'">Salvar</button></div>','clt');
+}
+document.addEventListener('click',function(ev){
+  var t=ev.target,b;
+  if(t.closest('[data-cltnew]')){cltForm(null);return;}
+  if((b=t.closest('[data-cltedit]'))){var e=cltL().filter(function(x){return x.id===b.dataset.cltedit;})[0];if(e){cltForm(e);}return;}
+  if((b=t.closest('[data-cltsave]'))){var g=function(k){var el=document.getElementById('clt_'+k);return el?el.value.trim():'';};
+    var o={id:b.dataset.cltsave,nome:g('nome'),cpf:g('cpf'),cargo:g('cargo'),sal:num(g('sal')),adm:g('adm'),dep:Math.max(0,parseInt(g('dep'),10)||0),dem:g('dem'),vt:g('vt')==='1'};
+    if(!o.nome||!o.sal||!o.adm){toast('Preencha nome, salário e admissão.');return;}
+    var l=cltL(),i=-1;l.forEach(function(x,k){if(x.id===o.id){i=k;}});if(i>=0){l[i]=o;}else{l.push(o);}
+    CFG.clt=l;saveCfg();m2close();render();toast('Funcionário salvo');return;}
+  if((b=t.closest('[data-cltdel]'))){var id=b.dataset.cltdel,old=cltL();CFG.clt=old.filter(function(x){return x.id!==id;});saveCfg();m2close();render();toast('Funcionário excluído');return;}
+  if((b=t.closest('[data-cltm]'))){cltComp=addM(cltComp,+b.dataset.cltm);render();return;}
+  if((b=t.closest('[data-cltfech]'))){fecharFolha(b.dataset.cltfech);return;}
+  if((b=t.closest('[data-clt13]'))){lancar13(b.dataset.clt13);return;}
+  if((b=t.closest('[data-holer]'))){var e2=cltL().filter(function(x){return x.id===b.dataset.holer;})[0];if(e2){var c=cltComp||mkey(TD());if(!cltAtivo(e2,c)){toast('Funcionário não estava ativo em '+mlabel(c)+'.');return;}saveFile('Holerite-'+e2.nome.split(' ')[0]+'-'+c+'.html',holeriteHtml(e2,c),'text/html');}return;}
+});
+document.addEventListener('change',function(ev){
+  var t=ev.target;
+  if(t.matches&&t.matches('[data-cltreg]')){CFG.regime=t.value;saveCfg();render();toast('Regime atualizado');}
+  if(t.matches&&t.matches('[data-cltrat]')){CFG.rat=num(t.value);saveCfg();render();}
+});
 
 /* ---- cliques, mudanças e teclas das novas funções ---- */
 document.addEventListener('click',function(e){
