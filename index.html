@@ -1045,7 +1045,7 @@ function painelTop(){
   var hoje=L('tar').filter(function(t){return t.status==='aberta'&&t.venc<=TD();}).sort(function(a,b){return (PRO[a.prio||'normal']-PRO[b.prio||'normal'])||a.venc.localeCompare(b.venc);});
   var rr=radar().filter(function(r){return r.seg[0]==='Em risco';}).length,sc=L('ctr').filter(function(c){return c.status==='rascunho'||c.status==='enviado';}).length,sn=fiscDados().semNf.length;
   var mini=function(l,v,pc,s,c,nav){return '<button class="mini" data-nav="'+nav+'"><small>'+l+'</small><b>'+v+'</b>'+(pc!=null?'<div class="prog'+(c==='bad'?' bad':'')+'"><i style="width:'+Math.min(100,pc)+'%"></i></div>':'')+'<em>'+s+'</em></button>';};
-  return '<div class="hello"><div><h2>'+sd+', David</h2><span>'+new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})+'</span></div></div>'+
+  return '<div class="hello"><div><h2>'+sd+', '+esc(meuNome())+'</h2><span>'+new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})+'</span></div></div>'+
   '<div class="minis">'+mini('A receber',brs(AR.s),null,AR.v?AR.v+' vencido(s) · '+brs(AR.vs):'Nada vencido',AR.v?'bad':'','rec')+mini('Projetos ativos',PA.n,null,(PA.a?PA.a+' atrasado(s) · ':'')+PA.w+' entrega(s) em 7 dias',PA.a?'bad':'','prj')+mini('Caixa em 13 semanas',brs(P.fim),null,'menor saldo '+brs(P.min)+(P.min<0?' · atenção':''),P.min<0?'bad':'','caixa')+mini('Tarefas de hoje',hoje.length,null,rr+' cliente(s) em risco · '+sc+' contrato(s) pendente(s) · '+sn+' sem nota','','rot')+'</div>'+
   '<div class="panel" style="margin-bottom:14px"><h2>Prioridades de hoje</h2>'+(hoje.length?hoje.slice(0,5).map(tkRow).join('')+(hoje.length>5?'<div class="tools" style="margin:10px 0 0"><button class="btn ghost sm" data-nav="rot">Ver as outras '+(hoje.length-5)+' tarefas</button></div>':''):empty('Nada urgente hoje. Bom trabalho!'))+'</div>';
 }
@@ -1328,7 +1328,7 @@ function resumoFala(){
   var hoje=L('tar').filter(function(t){return t.status==='aberta'&&t.venc<=TD();}),cob=hoje.filter(function(t){return t.tipo==='cob';}).length,ent=L('prj').filter(function(p){return p.status!=='entregue'&&p.prazo&&diff(p.prazo)>=0&&diff(p.prazo)<=2;}).length,atr=L('prj').filter(function(p){return p.status!=='entregue'&&p.prazo&&p.prazo<TD();}).length;
   var mk=mkey(TD()),rec=0;L('tit').forEach(function(t){if(t.tipo==='R'){(t.bx||[]).forEach(function(b){if(mkey(b.d)===mk){rec+=num(b.v);}});}});
   var venc=L('tit').filter(function(t){return t.tipo==='R'&&tstat(t)==='vencido';}),M=metaInfo(),hr=new Date().getHours(),p=function(n,s,pl){return n+' '+(n===1?s:pl);};
-  return (hr<12?'Bom dia':hr<18?'Boa tarde':'Boa noite')+', David. Hoje você tem '+p(hoje.length,'tarefa','tarefas')+(cob?', sendo '+cob+' de cobrança':'')+'. '+(atr?p(atr,'projeto atrasado','projetos atrasados')+'. ':'Nenhum projeto atrasado. ')+(ent?p(ent,'entrega','entregas')+' nos próximos dois dias. ':'')+(venc.length?'Há '+p(venc.length,'cobrança vencida','cobranças vencidas')+', somando '+falaR(venc.reduce(function(s,t){return s+saldo(t);},0))+'. ':'Nenhuma cobrança vencida. ')+'Neste mês entraram '+falaR(rec)+', e as vendas estão em '+Math.round(M.pc)+' por cento da meta. Bom trabalho!';
+  return (hr<12?'Bom dia':hr<18?'Boa tarde':'Boa noite')+', '+meuNome()+'. Hoje você tem '+p(hoje.length,'tarefa','tarefas')+(cob?', sendo '+cob+' de cobrança':'')+'. '+(atr?p(atr,'projeto atrasado','projetos atrasados')+'. ':'Nenhum projeto atrasado. ')+(ent?p(ent,'entrega','entregas')+' nos próximos dois dias. ':'')+(venc.length?'Há '+p(venc.length,'cobrança vencida','cobranças vencidas')+', somando '+falaR(venc.reduce(function(s,t){return s+saldo(t);},0))+'. ':'Nenhuma cobrança vencida. ')+'Neste mês entraram '+falaR(rec)+', e as vendas estão em '+Math.round(M.pc)+' por cento da meta. Bom trabalho!';
 }
 function stopFala(){try{if(ttsRef){ttsRef.stop();}}catch(e){}try{speechSynthesis.cancel();}catch(e){}}
 function falar(){var txt=resumoFala();m2(m2head('Resumo do dia','🔊 Lendo em voz alta')+'<p style="font-size:17px;line-height:1.6;margin:0">'+esc(txt)+'</p><div class="foot"><button class="btn ghost" type="button" data-m2x="1">Parar e fechar</button></div>','fala');var fb=function(){try{var u=new SpeechSynthesisUtterance(txt);u.lang='pt-BR';speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}};if(ttsRef){ttsRef.speak(txt,{language:'pt-BR'}).catch(function(e){if(!e||e.code!=='viewer_stopped'){fb();}});}else{fb();}}
@@ -2505,6 +2505,7 @@ document.addEventListener('click',function(ev){var t=ev.target,b;
   if((b=t.closest('[data-cvu]'))){var u=(fbUsers||[]).filter(function(x){return x.uid===b.dataset.cvu;})[0];if(u){convForm(u,'');}return;}
   if(t.closest('[data-cvgeral]')){copiar(convLink(''));return;}
 });
+function meuNome(){try{if(FB&&FB.on&&FB.nome){return String(FB.nome).trim().split(/\s+/)[0];}}catch(e){}return 'David';}
 
 /* ---- cliques, mudanças e teclas das novas funções ---- */
 document.addEventListener('click',function(e){
