@@ -1,5 +1,5 @@
 /* Saints ERP - funciona offline. Mude a versão ao publicar uma atualização. */
-var CACHE = 'saints-erp-v15';
+var CACHE = 'saints-erp-v16';
 var CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', function (e) {
@@ -19,8 +19,8 @@ self.addEventListener('fetch', function (e) {
   /* Páginas: tenta a rede (pega atualizações) e cai para o cache se estiver offline */
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req).then(function (r) {
-      var cp = r.clone(); caches.open(CACHE).then(function (c) { c.put('./index.html', cp); }); return r;
-    }).catch(function () { return caches.match('./index.html'); }));
+      if (/\/(index\.html)?$/.test(url.pathname)) { var cp = r.clone(); caches.open(CACHE).then(function (c) { c.put('./index.html', cp); }); } return r;
+    }).catch(function () { return caches.match(/\/(index\.html)?$/.test(url.pathname) ? './index.html' : req).then(function (h) { return h || caches.match('./index.html'); }); }));
     return;
   }
   /* Fonte do Google e arquivos do app: cache primeiro */
