@@ -5,6 +5,7 @@
 .pjm{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .pjm span{font-size:13px;color:var(--muted)}.pjm .ok{color:var(--ok)}.pjm .bad{color:var(--bad)}
 .pjc{margin-bottom:14px}
+.fblb{display:flex;flex-direction:column;gap:10px;align-items:center}.fblb input{width:100%;font:inherit;font-size:16px;padding:13px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff}.fblb input::placeholder{color:#A1A1AA}.fberr{color:#FCA5A5;font-size:14px;min-height:1em;margin:0}.panel .fberr{color:var(--bad)}
 .stp{margin:10px 0 0;padding-left:20px;display:grid;gap:12px;line-height:1.5;font-size:14px}.stp .btn{margin-top:6px}details summary{list-style:revert}
 .bknag{display:flex;gap:10px;align-items:center;justify-content:space-between;background:rgba(234,179,8,.14);border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:14px}
 .lockov{position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#12141A,#2A0A10);display:grid;place-items:center;color:#fff}
@@ -1092,19 +1093,19 @@ function vAcc(){
   return meu+tb+how;
 }
 /* ---------- render principal ---------- */
-var NAV=[['','Visão geral'],['painel','Painel','◔'],['auto','Automação','⚡'],['','Comercial'],['orc','Orçamentos','▤'],['funil','Funil de vendas','⇶'],['preco','Calculadora de preço','∑'],['ctr','Contratos','§'],['cli','Clientes','☺'],['vrf','Análise de clientes','⛨'],['msg','Modelos de mensagem','✉'],['srv','Ficha técnica','☰'],['','Operação'],['prj','Projetos','◧'],['rot','Tarefas e rotinas','✓'],['bib','Normas e padrões','⌘'],['eqp','Equipamentos e licenças','⚙'],['','Financeiro'],['rec','A receber','↓'],['fisc','Fiscal e notas','▣'],['pag','A pagar','↑'],['forn','Fornecedores','⛁'],['conc','Conciliação bancária','⇄'],['pj','Equipe PJ','◈'],['clt','CLT e encargos','⚖'],['','Gestão'],['mes','Painel do mês','◷'],['rel','Relatórios','▥'],['xls','Excel','⊞'],['','Análises'],['agenda','Agenda','▦'],['caixa','Fluxo de caixa','≈'],['rent','Rentabilidade','◍'],['radar','Radar de clientes','◎'],['','Conta'],['acc','Acessos','⚿'],['seg','Senha e backup','🔒'],['site','Site da Saints Projetos','↗']];
+var NAV=[['','Visão geral'],['painel','Painel','◔'],['auto','Automação','⚡'],['','Comercial'],['orc','Orçamentos','▤'],['funil','Funil de vendas','⇶'],['preco','Calculadora de preço','∑'],['ctr','Contratos','§'],['cli','Clientes','☺'],['vrf','Análise de clientes','⛨'],['msg','Modelos de mensagem','✉'],['srv','Ficha técnica','☰'],['','Operação'],['prj','Projetos','◧'],['rot','Tarefas e rotinas','✓'],['bib','Normas e padrões','⌘'],['eqp','Equipamentos e licenças','⚙'],['','Financeiro'],['rec','A receber','↓'],['fisc','Fiscal e notas','▣'],['pag','A pagar','↑'],['forn','Fornecedores','⛁'],['conc','Conciliação bancária','⇄'],['pj','Equipe PJ','◈'],['clt','CLT e encargos','⚖'],['','Gestão'],['mes','Painel do mês','◷'],['rel','Relatórios','▥'],['xls','Excel','⊞'],['','Análises'],['agenda','Agenda','▦'],['caixa','Fluxo de caixa','≈'],['rent','Rentabilidade','◍'],['radar','Radar de clientes','◎'],['','Conta'],['acc','Acessos','⚿'],['nuvem','Nuvem e logins','☁'],['seg','Senha e backup','🔒'],['site','Site da Saints Projetos','↗']];
 var NAVCOL=['prj','rot','agenda','cli','acc','site'];
 var SITE_PADRAO='https://claude.ai/artifact/1mbMGFD48KwDhhGzdR35Fd#play-15dd8cd198dd';
 function siteUrl(){var u=String((CFG&&CFG.site)||SITE_PADRAO||'').trim();if(u&&!/^https?:\/\//i.test(u)){u='https://'+u;}return u;}
 function navOk(k){return ME.adm||NAVCOL.indexOf(k)>=0;}
-var TTL={painel:'Painel',auto:'Automação',orc:'Orçamentos',cli:'Clientes',srv:'Ficha técnica de serviços',prj:'Projetos',rec:'Contas a receber',pag:'Contas a pagar',rel:'Relatórios',rot:'Tarefas e rotinas',ctr:'Contratos',fisc:'Fiscal e notas',ia:'Pergunte ao ERP',agenda:'Agenda',caixa:'Fluxo de caixa projetado',rent:'Rentabilidade e preço',radar:'Radar de clientes',meta:'Metas e capacidade',acc:'Acessos e equipe',pj:'Equipe PJ',clt:'CLT e encargos',forn:'Fornecedores',vrf:'Análise de clientes',funil:'Funil de vendas',preco:'Calculadora de preço',msg:'Modelos de mensagem',bib:'Normas e padrões',eqp:'Equipamentos e licenças',conc:'Conciliação bancária',mes:'Painel do mês',xls:'Excel',seg:'Senha e backup'};
+var TTL={painel:'Painel',auto:'Automação',orc:'Orçamentos',cli:'Clientes',srv:'Ficha técnica de serviços',prj:'Projetos',rec:'Contas a receber',pag:'Contas a pagar',rel:'Relatórios',rot:'Tarefas e rotinas',ctr:'Contratos',fisc:'Fiscal e notas',ia:'Pergunte ao ERP',agenda:'Agenda',caixa:'Fluxo de caixa projetado',rent:'Rentabilidade e preço',radar:'Radar de clientes',meta:'Metas e capacidade',acc:'Acessos e equipe',pj:'Equipe PJ',clt:'CLT e encargos',forn:'Fornecedores',vrf:'Análise de clientes',funil:'Funil de vendas',preco:'Calculadora de preço',msg:'Modelos de mensagem',bib:'Normas e padrões',eqp:'Equipamentos e licenças',conc:'Conciliação bancária',mes:'Painel do mês',xls:'Excel',seg:'Senha e backup',nuvem:'Nuvem e logins'};
 function cnt(v){if(v==='orc'){return L('orc').filter(function(o){return o.status==='enviado';}).length;}if(v==='prj'){return L('prj').filter(function(p){return p.status!=='entregue';}).length;}if(v==='rec'){return L('tit').filter(function(t){return t.tipo==='R'&&tstat(t)==='vencido';}).length;}if(v==='rot'){return tdue();}if(v==='ctr'){return L('ctr').filter(function(c){return c.status==='rascunho'||c.status==='enviado';}).length;}if(v==='auto'){return ao('alerta')?pend().length:0;}if(v==='funil'){return leadFU().length;}if(v==='eqp'){return eqpAlert().length;}if(v==='pj'){return L('tit').filter(function(t){return isPJ(t)&&tstat(t)==='pago'&&!t.nf&&!pjNotas(t.id).length;}).length;}return 0;}
 function render(){
   if(!navOk(ui.view)){ui.view='prj';}
   var nv=NAV.filter(function(n){return !n[2]||navOk(n[0]);}).filter(function(n,i,a){return n[2]||(a[i+1]&&a[i+1][2]);});
   $('#nav').innerHTML=nv.map(function(n){if(!n[2]){return '<div class="grp">'+n[1]+'</div>';}if(n[0]==='site'&&siteUrl()){return '<a class="nv" style="text-decoration:none" href="'+esc(siteUrl())+'" target="_blank" rel="noopener"><i>'+n[2]+'</i>'+n[1]+'</a>';}var c=cnt(n[0]);return '<button class="nv" data-nav="'+n[0]+'"'+(ui.view===n[0]?' aria-current="page"':'')+'><i>'+n[2]+'</i>'+n[1]+(c?'<em>'+c+'</em>':'')+'</button>';}).join('');
   $('#ttl').textContent=TTL[ui.view];
-  var v=ui.view;$('#view').innerHTML=v==='painel'?vPainelX():v==='orc'?vOrc():v==='cli'?vCli():v==='srv'?vSrv():v==='prj'?vPrj():v==='rec'?vFin('R'):v==='pag'?vFin('P'):v==='pj'?vPJ():v==='clt'?vCLT():v==='forn'?vForn():v==='vrf'?vVrf():v==='rel'?vRel():v==='rot'?vRot():v==='ctr'?vCtr():v==='fisc'?vFisc():v==='ia'?vIA():v==='agenda'?evtBox()+vAgenda():v==='funil'?vFunil():v==='preco'?vPreco():v==='msg'?vMsg():v==='bib'?vBib():v==='eqp'?vEqp():v==='conc'?vConc():v==='mes'?vMes():v==='xls'?vXls():v==='seg'?vSeg():v==='caixa'?vCaixa():v==='rent'?vRent():v==='radar'?vRadar():v==='meta'?vMeta()+conqHtml(true):v==='acc'?vAcc():vAuto();
+  var v=ui.view;$('#view').innerHTML=v==='painel'?vPainelX():v==='orc'?vOrc():v==='cli'?vCli():v==='srv'?vSrv():v==='prj'?vPrj():v==='rec'?vFin('R'):v==='pag'?vFin('P'):v==='pj'?vPJ():v==='clt'?vCLT():v==='forn'?vForn():v==='vrf'?vVrf():v==='rel'?vRel():v==='rot'?vRot():v==='ctr'?vCtr():v==='fisc'?vFisc():v==='ia'?vIA():v==='agenda'?evtBox()+vAgenda():v==='funil'?vFunil():v==='preco'?vPreco():v==='msg'?vMsg():v==='bib'?vBib():v==='eqp'?vEqp():v==='conc'?vConc():v==='mes'?vMes():v==='xls'?vXls():v==='seg'?vSeg():v==='caixa'?vCaixa():v==='rent'?vRent():v==='radar'?vRadar():v==='meta'?vMeta()+conqHtml(true):v==='acc'?vAccFb():v==='nuvem'?vNuvem():vAuto();
   if(!ME.adm){var nb=document.querySelectorAll('[data-new="prj"]');for(var z=0;z<nb.length;z++){nb[z].remove();}}
   renderBanner();tabbarRender();bkNag();
 }
@@ -1972,7 +1973,7 @@ function xlsx(sheets){
 function saveXlsx(nome,sheets){saveFile(nome,xlsx(sheets),'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');}
 /* ---- backup semanal ---- */
 function backup(){saveFile('saints-erp-backup-'+TD()+'.json',JSON.stringify({D:D,cfg:CFG},null,1),'application/json');CFG.lastBk=TD();saveCfg();var b=document.getElementById('bknag');if(b){b.remove();}}
-function bkNag(){try{var v=document.getElementById('view');if(!v||document.getElementById('bknag')){return;}var lb=CFG.lastBk,dd=lb?-diff(lb):999;if(dd<(num(CFG.bkDias)||7)){return;}var n=0;COLS.forEach(function(c){n+=Object.keys(D[c]||{}).length;});if(n<5){return;}
+function bkNag(){try{if(typeof FB!=='undefined'&&FB.on&&FB.perf!=='admin'){return;}var v=document.getElementById('view');if(!v||document.getElementById('bknag')){return;}var lb=CFG.lastBk,dd=lb?-diff(lb):999;if(dd<(num(CFG.bkDias)||7)){return;}var n=0;COLS.forEach(function(c){n+=Object.keys(D[c]||{}).length;});if(n<5){return;}
   var el=document.createElement('div');el.id='bknag';el.className='bknag';el.innerHTML='<span>💾 '+(lb?'Último backup há '+dd+' dias.':'Você ainda não fez backup.')+' Guarde uma cópia dos seus dados.</span><button class="btn sm" type="button" data-act="backup">Fazer backup</button>';v.insertBefore(el,v.firstChild);}catch(e){}}
 /* ---- senha / digital ---- */
 var LK='saints-lock',lockAt=0;
@@ -2344,6 +2345,153 @@ document.addEventListener('click',function(ev){var t=ev.target;
   if(t.closest('[data-sitelink]')){copiar('https://davidss18ds-maker.github.io/saints-app/orcamento.html');return;}
 });
 
+/* ===================== v16: nuvem (Firebase) com logins e perfis ===================== */
+var FBK='saints-fb',FBS='saints-fb-sess';
+var PERFIS={admin:'Administrador',fin:'RH/Financeiro',adm:'Analista administrativa',ti:'TI',aux:'Auxiliar'};
+var PNAV={fin:['painel','rec','fisc','pag','forn','conc','pj','clt','mes','rel','xls','caixa','acc','site'],adm:['painel','orc','funil','preco','ctr','cli','vrf','msg','srv','prj','rot','bib','agenda','acc','site'],ti:['eqp','seg','acc','site'],aux:['prj','srv','rot','bib','agenda','acc','site']};
+var PR={fin:['tit','rcr','forn','log','anx','cli'],adm:['cli','srv','orc','prj','ctr','lead','evt','vrf','tar','anx','log','bib'],ti:['eqp','log'],aux:['prj','srv','tar','bib','evt','anx','cli','log']};
+var PW={fin:['tit','rcr','forn','log','anx'],adm:['cli','srv','orc','prj','ctr','lead','evt','vrf','tar','anx','log','tit'],ti:['eqp','log'],aux:['prj','tar','anx','log']};
+var FB={cfg:null,sess:null,perf:null,nome:'',last:{},timer:null,on:false};
+function fbCfg(){try{return JSON.parse(localStorage.getItem(FBK)||'null');}catch(e){return null;}}
+function fbSessGet(){try{return JSON.parse(localStorage.getItem(FBS)||'null');}catch(e){return null;}}
+function fbSessSet(s){if(s){localStorage.setItem(FBS,JSON.stringify(s));}else{localStorage.removeItem(FBS);}FB.sess=s;}
+function canR(c){return FB.perf==='admin'||(PR[FB.perf]||[]).indexOf(c)>=0;}
+function canW(c){if(c==='cfg'){return FB.perf!=='aux';}return FB.perf==='admin'||(PW[FB.perf]||[]).indexOf(c)>=0;}
+function navOk(k){if(FB.on&&FB.perf!=='admin'){return (PNAV[FB.perf]||[]).indexOf(k)>=0;}return ME.adm||NAVCOL.indexOf(k)>=0;}
+/* ---- Firestore: conversão de valores ---- */
+function toFs(v){if(v===null||v===undefined){return {nullValue:null};}if(typeof v==='boolean'){return {booleanValue:v};}if(typeof v==='number'){return Number.isInteger(v)&&Math.abs(v)<9e15?{integerValue:String(v)}:{doubleValue:v};}if(typeof v==='string'){return {stringValue:v};}
+  if(Array.isArray(v)){return {arrayValue:{values:v.map(toFs)}};}var f={};Object.keys(v).forEach(function(k){if(v[k]!==undefined){f[k]=toFs(v[k]);}});return {mapValue:{fields:f}};}
+function fromFs(x){if(!x){return null;}if('stringValue' in x){return x.stringValue;}if('integerValue' in x){return parseInt(x.integerValue,10);}if('doubleValue' in x){return x.doubleValue;}if('booleanValue' in x){return x.booleanValue;}if('nullValue' in x){return null;}if('timestampValue' in x){return x.timestampValue;}
+  if('arrayValue' in x){return (x.arrayValue.values||[]).map(fromFs);}if('mapValue' in x){var o={},f=x.mapValue.fields||{};Object.keys(f).forEach(function(k){o[k]=fromFs(f[k]);});return o;}return null;}
+function docObj(d){var o={},f=d.fields||{};Object.keys(f).forEach(function(k){if(k!=='_ts'){o[k]=fromFs(f[k]);}});return {id:decodeURIComponent(d.name.split('/').pop()),v:o,ts:f._ts?f._ts.timestampValue:''};}
+/* ---- autenticação ---- */
+function fbAuth(path,body){return fetch('https://identitytoolkit.googleapis.com/v1/'+path+'?key='+encodeURIComponent(FB.cfg.apiKey),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok){var m=(j.error&&j.error.message)||'ERRO';throw new Error(m);}return j;});});}
+function fbErr(m){m=String(m||'');return /INVALID_LOGIN_CREDENTIALS|INVALID_PASSWORD|EMAIL_NOT_FOUND/.test(m)?'E-mail ou senha incorretos.':/EMAIL_EXISTS/.test(m)?'Esse e-mail já tem login.':/WEAK_PASSWORD/.test(m)?'A senha precisa ter pelo menos 6 caracteres.':/TOO_MANY/.test(m)?'Muitas tentativas. Espere alguns minutos.':/OPERATION_NOT_ALLOWED|CONFIGURATION_NOT_FOUND/.test(m)?'O login por e-mail e senha não está ativado no Firebase (passo 2).':/API_KEY|API key/.test(m)?'A chave do Firebase (apiKey) está errada.':/PERMISSION_DENIED|403/.test(m)?'Sem permissão. Confira se as regras foram publicadas (passo 4).':/Failed to fetch|NetworkError/.test(m)?'Sem internet.':m;}
+function fbLogin(email,senha){return fbAuth('accounts:signInWithPassword',{email:email,password:senha,returnSecureToken:true}).then(function(j){fbSessSet({uid:j.localId,email:j.email,id:j.idToken,rf:j.refreshToken,exp:Date.now()+(+j.expiresIn-120)*1000});return FB.sess;});}
+function fbToken(){var s=FB.sess||fbSessGet();if(!s){return Promise.reject(new Error('SEM_LOGIN'));}FB.sess=s;if(Date.now()<s.exp){return Promise.resolve(s.id);}
+  return fetch('https://securetoken.googleapis.com/v1/token?key='+encodeURIComponent(FB.cfg.apiKey),{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(s.rf)}).then(function(r){return r.json().then(function(j){if(!r.ok){throw new Error((j.error&&j.error.message)||'SESSAO');}s.id=j.id_token;s.rf=j.refresh_token;s.exp=Date.now()+(+j.expires_in-120)*1000;fbSessSet(s);return s.id;});});}
+/* ---- Firestore REST ---- */
+function fbBase(){return 'https://firestore.googleapis.com/v1/projects/'+FB.cfg.projectId+'/databases/(default)/documents';}
+function fbName(c,id){return 'projects/'+FB.cfg.projectId+'/databases/(default)/documents/'+c+'/'+encodeURIComponent(id);}
+function fbReq(method,url,body){return fbToken().then(function(t){return fetch(url,{method:method,headers:{'Authorization':'Bearer '+t,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});}).then(function(r){if(r.status===404&&method==='GET'){return null;}return r.text().then(function(tx){var j=tx?JSON.parse(tx):{};if(!r.ok){var e=new Error((j.error&&(j.error.status||j.error.message))||('HTTP '+r.status));e.code=r.status===403?'sem permissão':r.status;throw e;}return j;});});}
+function fbWrite(c,id,v){var w={update:{name:fbName(c,id),fields:toFs(v).mapValue.fields},updateTransforms:[{fieldPath:'_ts',setToServerValue:'REQUEST_TIME'}]};return fbReq('POST',fbBase()+':commit',{writes:[w]});}
+function fbList(c){var out=[],go=function(tk){return fbReq('GET',fbBase()+'/'+c+'?pageSize=300'+(tk?'&pageToken='+encodeURIComponent(tk):'')).then(function(j){((j&&j.documents)||[]).forEach(function(d){out.push(docObj(d));});return j&&j.nextPageToken?go(j.nextPageToken):out;});};return go('');}
+function fbSince(c,ts){return fbReq('POST',fbBase()+':runQuery',{structuredQuery:{from:[{collectionId:c}],where:{fieldFilter:{field:{fieldPath:'_ts'},op:'GREATER_THAN',value:{timestampValue:ts}}}}}).then(function(arr){return (arr||[]).filter(function(x){return x.document;}).map(function(x){return docObj(x.document);});});}
+function cfgSplit(v){var m=clone(v),rh={clt:m.clt||[],folhas:m.folhas||{}};delete m.clt;delete m.folhas;return {m:m,rh:rh};}
+/* o app grava pela mesma interface do modo nuvem antigo: dbRef.doc('colecao/id').set(v) */
+var FBDB={doc:function(path){var p=path.split('/'),c=p[0],id=p.slice(1).join('/');return {
+  set:function(v){if(c==='cfg'){var s=cfgSplit(v),ps=[];if(canW('cfg')){ps.push(fbWrite('cfg','main',s.m));}if(FB.perf==='admin'||FB.perf==='fin'){ps.push(fbWrite('cfg','rh',s.rh));}return Promise.all(ps);}
+    if(!canW(c)){return Promise.resolve();}if(JSON.stringify(v).length>950000){toast('Arquivo grande demais para a nuvem (máx. ~700 KB). Use uma foto menor.');return Promise.resolve();}return fbWrite(c,id,v);},
+  'delete':function(){if(FB.perf!=='admin'){toast('Só o administrador pode excluir. O registro volta na próxima atualização.');return Promise.resolve();}
+    return fbReq('DELETE',fbBase()+'/'+c+'/'+encodeURIComponent(id)).then(function(){return fbWrite('del',c+'__'+id,{c:c,id:id});});}};}};
+/* ---- carregar e acompanhar ---- */
+function fbSet(c,arr){arr.forEach(function(d){D[c][d.id]=d.v;if(d.ts&&(!FB.last[c]||d.ts>FB.last[c])){FB.last[c]=d.ts;}});}
+function fbLoadAll(){
+  var cols=COLS.filter(canR);FB.last={};
+  return Promise.all([fbReq('GET',fbBase()+'/cfg/main'),(FB.perf==='admin'||FB.perf==='fin')?fbReq('GET',fbBase()+'/cfg/rh'):Promise.resolve(null)]).then(function(r){
+    var m=r[0]?docObj(r[0]).v:{},rh=r[1]?docObj(r[1]).v:{};var sq=(CFG&&CFG.seq)||{};CFG=Object.assign(defCfg(),m,rh);CFG.seq=CFG.seq||{};
+    return Promise.all(cols.map(function(c){return fbList(c).then(function(a){D[c]={};fbSet(c,a);});})).then(function(){return fbList('del').then(function(a){a.forEach(function(d){if(d.ts&&(!FB.last.del||d.ts>FB.last.del)){FB.last.del=d.ts;}});});});});
+}
+function fbPoll(){
+  if(!FB.on||document.hidden||wq.length||wBusy){return;}
+  var cols=COLS.filter(canR),ch=0,ps=cols.map(function(c){var t=FB.last[c]||'2000-01-01T00:00:00Z';return fbSince(c,t).then(function(a){a.forEach(function(d){var cur=D[c][d.id];if(!cur||JSON.stringify(cur)!==JSON.stringify(d.v)){if(!(ui.modal&&ui.draft&&ui.draft.id===d.id)){D[c][d.id]=d.v;ch++;}}});fbSet(c,[]);a.forEach(function(d){if(d.ts>(FB.last[c]||'')){FB.last[c]=d.ts;}});});});
+  ps.push(fbSince('del',FB.last.del||'2000-01-01T00:00:00Z').then(function(a){a.forEach(function(d){if(D[d.v.c]&&D[d.v.c][d.v.id]){delete D[d.v.c][d.v.id];ch++;}if(d.ts>(FB.last.del||'')){FB.last.del=d.ts;}});}));
+  ps.push(fbReq('GET',fbBase()+'/cfg/main').then(function(r){if(r){var v=docObj(r).v,sq=CFG.seq||{};Object.keys(v).forEach(function(k){if(k!=='seq'&&JSON.stringify(CFG[k])!==JSON.stringify(v[k])){CFG[k]=v[k];ch++;}});CFG.seq=Object.assign({},v.seq||{});Object.keys(sq).forEach(function(k){if((sq[k]||0)>(CFG.seq[k]||0)){CFG.seq[k]=sq[k];}});}}));
+  Promise.all(ps).then(function(){if(ch){render();}okSync();}).catch(function(e){if(/SEM_LOGIN|SESSAO|TOKEN/.test(String(e&&e.message))){fbSair(true);}});
+}
+function fbStart(){
+  return fbReq('GET',fbBase()+'/usuarios/'+FB.sess.uid).then(function(u){
+    var dono=FB.cfg.owner&&FB.sess.email&&FB.sess.email.toLowerCase()===FB.cfg.owner.toLowerCase(),uv=u?docObj(u).v:null;
+    if(!dono&&(!uv||uv.ativo===false)){throw new Error('Seu login ainda não tem perfil ou está desativado. Fale com o administrador.');}
+    FB.perf=dono?'admin':uv.perfil;FB.nome=dono?'David':(uv.nome||FB.sess.email);
+    if(dono&&!uv){fbWrite('usuarios',FB.sess.uid,{nome:'David',email:FB.sess.email,perfil:'admin',ativo:true}).catch(function(){});}
+    dbRef=FBDB;mode='db';FB.on=true;ME.adm=FB.perf==='admin';ME.lvl=PERFIS[FB.perf]||FB.perf;ADMC.length=0;
+    COLS.forEach(function(c){D[c]={};});setSync('Carregando da nuvem…',true);render();
+    return fbLoadAll().then(function(){
+      if(!navOk(ui.view)){ui.view=(PNAV[FB.perf]||['painel'])[0];}
+      setSync('Nuvem · '+FB.nome+' ('+PERFIS[FB.perf]+')',false);render();obxReplay();
+      if(FB.perf==='admin'){setTimeout(function(){autoRun(false);},800);}
+      clearInterval(FB.timer);FB.timer=setInterval(fbPoll,60000);
+    });
+  });
+}
+function okSync(){if(mode==='db'&&!wq.length&&!wBusy){setSync(FB.on?'Nuvem · '+FB.nome+' ('+PERFIS[FB.perf]+')':(ME.adm?'Salvo na nuvem':'Salvo na nuvem · acesso de '+ME.lvl.toLowerCase()),false);}}
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&FB.on){fbPoll();}});
+function fbSair(expirou){fbSessSet(null);FB.on=false;clearInterval(FB.timer);location.reload();}
+/* ---- tela de login ---- */
+function loginShow(msg){if(document.getElementById('fblog')){return;}var o=document.createElement('div');o.id='fblog';o.className='lockov';
+  o.innerHTML='<form class="lockb fblb" id="fblf"><img src="icon-192.png" alt="" style="width:54px;height:54px;border-radius:14px"><h2>Saints ERP</h2><p>'+(msg?esc(msg):'Entre com o seu login')+'</p><input id="fbe" type="email" autocomplete="username" placeholder="E-mail" value="'+esc((fbSessGet()||{}).email||localStorage.getItem('saints-fb-last')||'')+'"><input id="fbp" type="password" autocomplete="current-password" placeholder="Senha"><button class="btn" type="submit" id="fbbt" style="width:100%;justify-content:center">Entrar</button><p class="fberr" id="fberr"></p><button type="button" class="lkf" data-fbreset="1">Esqueci a senha</button><button type="button" class="lkf" data-fblocal="1">Usar sem nuvem neste aparelho</button></form>';
+  document.body.appendChild(o);setTimeout(function(){var e=document.getElementById(document.getElementById('fbe').value?'fbp':'fbe');if(e){e.focus();}},100);}
+document.addEventListener('submit',function(ev){if(ev.target.id!=='fblf'){return;}ev.preventDefault();var em=m2in('fbe'),pw=document.getElementById('fbp').value,er=document.getElementById('fberr'),bt=document.getElementById('fbbt');if(!em||!pw){er.textContent='Preencha e-mail e senha.';return;}
+  bt.disabled=true;bt.textContent='Entrando…';er.textContent='';localStorage.setItem('saints-fb-last',em);
+  fbLogin(em,pw).then(fbStart).then(function(){var o=document.getElementById('fblog');if(o){o.remove();}toast('Bem-vindo, '+FB.nome.split(' ')[0]+'!');}).catch(function(e){bt.disabled=false;bt.textContent='Entrar';er.textContent=fbErr(e&&e.message);if(FB.sess&&!FB.on){fbSessSet(null);}});});
+document.addEventListener('click',function(ev){var t=ev.target;
+  if(t.closest('[data-fbreset]')){var em=m2in('fbe');if(!em){document.getElementById('fberr').textContent='Digite seu e-mail acima e toque de novo.';return;}fbAuth('accounts:sendOobCode',{requestType:'PASSWORD_RESET',email:em}).then(function(){document.getElementById('fberr').textContent='Enviamos um link para '+em+' criar uma senha nova.';}).catch(function(e){document.getElementById('fberr').textContent=fbErr(e.message);});return;}
+  if(t.closest('[data-fblocal]')){var o=document.getElementById('fblog');if(o){o.remove();}toast('Usando os dados só deste aparelho.');return;}
+},true);
+/* ---- regras de segurança geradas para o Firebase ---- */
+function fbRules(owner){var q=function(a){return '['+a.map(function(x){return "'"+x+"'";}).join(',')+']';};
+  return "rules_version = '2';\n// Saints ERP · regras de acesso por perfil (geradas pelo app)\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    function logado() { return request.auth != null; }\n    function dono() { return logado() && request.auth.token.email == '"+owner.toLowerCase()+"'; }\n    function u() { return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data; }\n    function tem() { return logado() && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid)); }\n    function perfil() { return dono() ? 'admin' : (tem() && u().ativo != false ? u().perfil : 'nenhum'); }\n"+
+  "    function le(c) { let p = perfil(); return p == 'admin' || (p == 'fin' && c in "+q(PR.fin)+") || (p == 'adm' && c in "+q(PR.adm)+") || (p == 'ti' && c in "+q(PR.ti)+") || (p == 'aux' && c in "+q(PR.aux)+"); }\n"+
+  "    function grava(c) { let p = perfil(); return p == 'admin' || (p == 'fin' && c in "+q(PW.fin)+") || (p == 'adm' && c in "+q(PW.adm)+") || (p == 'ti' && c in "+q(PW.ti)+") || (p == 'aux' && c in "+q(PW.aux)+"); }\n\n"+
+  "    match /usuarios/{uid} {\n      allow read: if logado() && (request.auth.uid == uid || perfil() in ['admin','ti']);\n      allow create, update: if perfil() == 'admin' || (perfil() == 'ti' && request.resource.data.perfil != 'admin') || (dono() && request.auth.uid == uid);\n      allow delete: if perfil() == 'admin';\n    }\n    match /cfg/main {\n      allow read: if perfil() != 'nenhum';\n      allow write: if perfil() in ['admin','fin','adm','ti'];\n    }\n    match /cfg/rh {\n      allow read, write: if perfil() in ['admin','fin'];\n    }\n    match /del/{d} {\n      allow read: if perfil() != 'nenhum';\n      allow create, update: if perfil() == 'admin';\n    }\n    match /{col}/{id} {\n      allow read: if col != 'usuarios' && col != 'cfg' && col != 'del' && le(col);\n      allow create, update: if col != 'usuarios' && col != 'cfg' && col != 'del' && grava(col);\n      allow delete: if perfil() == 'admin';\n    }\n  }\n}\n";}
+/* ---- envio dos dados deste aparelho para a nuvem ---- */
+function fbUpload(){var o;try{o=JSON.parse(localStorage.getItem(LS)||'null');}catch(e){o=null;}if(!o||!o.D){return Promise.resolve(0);}
+  var writes=[],big=0;COLS.forEach(function(c){Object.keys(o.D[c]||{}).forEach(function(id){var v=o.D[c][id];if(JSON.stringify(v).length>950000){big++;return;}writes.push({update:{name:fbName(c,id),fields:toFs(v).mapValue.fields},updateTransforms:[{fieldPath:'_ts',setToServerValue:'REQUEST_TIME'}]});});});
+  var s=cfgSplit(Object.assign(defCfg(),o.cfg||{}));[['main',s.m],['rh',s.rh]].forEach(function(x){writes.push({update:{name:fbName('cfg',x[0]),fields:toFs(x[1]).mapValue.fields},updateTransforms:[{fieldPath:'_ts',setToServerValue:'REQUEST_TIME'}]});});
+  var lotes=[],cur=[],sz=0;writes.forEach(function(w){var n=JSON.stringify(w).length;if(cur.length>=400||sz+n>6000000){lotes.push(cur);cur=[];sz=0;}cur.push(w);sz+=n;});if(cur.length){lotes.push(cur);}
+  var i=0,go=function(){if(i>=lotes.length){return Promise.resolve(writes.length);}toast('Enviando para a nuvem… '+Math.round(i/lotes.length*100)+'%');return fbReq('POST',fbBase()+':commit',{writes:lotes[i++]}).then(go);};
+  return go().then(function(n){if(big){toast(big+' anexo(s) grande(s) ficaram só no aparelho.');}return n;});}
+/* ---- tela de configuração (administrador) ---- */
+function vNuvem(){var c=fbCfg()||{};
+  if(FB.on){return '<div class="panel" style="margin-bottom:14px"><h2>☁ Nuvem ligada</h2><div class="okbox" style="margin-top:12px">✓ Conectado ao projeto <b>'+esc(c.projectId)+'</b> como '+esc(FB.nome)+' ('+PERFIS[FB.perf]+').</div><p class="note">Os logins da equipe ficam em <b>Acessos</b>.</p><div class="foot"><button class="btn ghost" data-nav="acc">Ir para Acessos</button><button class="btn ghost" data-fbsair="1">Sair deste aparelho</button></div></div>';}
+  return '<div class="panel" style="margin-bottom:14px"><h2>☁ Nuvem e logins da equipe</h2><p class="note" style="margin:8px 0 0">Coloca os dados no Firebase, um serviço gratuito do Google, para cada pessoa entrar com o próprio login e ver só o que o perfil dela permite. Faça uma vez só; leva uns 20 minutos.</p><ol class="stp">'+
+  '<li>No Chrome (modo computador), abra <b>console.firebase.google.com</b> e toque em <b>Criar um projeto</b>. Nome: <b>saints-erp</b>. Pode desligar o Google Analytics.</li>'+
+  '<li>No menu, abra <b>Authentication → Vamos começar → E-mail/senha</b>, ative a primeira opção e salve.</li>'+
+  '<li>Abra <b>Firestore Database → Criar banco de dados</b>. Local: <b>southamerica-east1 (São Paulo)</b>. Comece no <b>modo de produção</b>.</li>'+
+  '<li>Coloque o seu e-mail de administrador e copie as regras de segurança. No Firestore, abra a aba <b>Regras</b>, apague tudo, cole e toque em <b>Publicar</b>.<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><input id="fbown" type="email" placeholder="Seu e-mail" value="'+esc(c.owner||'davids.s18.ds@gmail.com')+'" style="flex:1;min-width:180px"><button class="btn sm" data-fbrules="1">📋 Copiar regras</button></div></li>'+
+  '<li>Toque na <b>engrenagem ⚙ → Configurações do projeto</b>. Embaixo, em "Seus apps", toque no ícone <b>&lt;/&gt;</b> (Web), dê o nome <b>saints-app</b> e registre. Copie os valores de <b>apiKey</b> e <b>projectId</b> e cole aqui:<div class="fg" style="margin-top:8px">'+fld('apiKey','<input id="fbkey" value="'+esc(c.apiKey||'')+'" placeholder="AIza…">')+fld('projectId','<input id="fbpid" value="'+esc(c.projectId||'')+'" placeholder="saints-erp-xxxxx">')+'</div></li>'+
+  '<li>Crie a sua senha de administrador e conecte. O app envia todos os dados deste celular para a nuvem.<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><input id="fbpw" type="password" placeholder="Senha (mín. 6 caracteres)" autocomplete="new-password" style="flex:1;min-width:180px"><button class="btn sm" data-fbgo="1">Conectar e enviar dados</button></div><p class="fberr" id="fbgoerr" style="margin-top:8px"></p></li></ol><p class="note">Faça um <b>backup</b> antes (Mais → Senha e backup). Os dados deste aparelho continuam guardados nele também.</p></div>';}
+/* ---- acessos: criar e gerenciar logins ---- */
+var fbUsers=null;
+function fbLoadUsers(){return fbList('usuarios').then(function(a){fbUsers=a.map(function(d){var o=d.v;o.uid=d.id;return o;});render();}).catch(function(e){toast(fbErr(e.message));});}
+var vAcc0=vAcc;
+function vAccFb(){
+  if(!FB.on){return (fbCfg()?'<div class="panel" style="margin-bottom:14px"><h2>Login</h2><p class="note">A nuvem está configurada, mas você está usando os dados só deste aparelho.</p><div class="foot"><button class="btn" data-fblogin="1">Entrar com meu login</button></div></div>':'')+vAcc0();}
+  var meu='<div class="panel" style="margin-bottom:14px"><h2>Seu acesso</h2><div class="pjh" style="margin-top:10px"><div class="pjav">'+esc(FB.nome.charAt(0).toUpperCase())+'</div><div style="flex:1"><b>'+esc(FB.nome)+'</b><span>'+esc(FB.sess.email)+' · '+PERFIS[FB.perf]+'</span></div><button class="btn ghost sm" data-fbsair="1">Sair</button></div></div>';
+  if(FB.perf!=='admin'&&FB.perf!=='ti'){return meu+permTab();}
+  if(!fbUsers){fbLoadUsers();}
+  var us=(fbUsers||[]).sort(function(a,b){return (a.nome||'').localeCompare(b.nome||'');});
+  return meu+'<div class="panel" style="margin-bottom:14px"><div class="pjh"><div style="flex:1"><h2 style="margin:0">Logins da equipe</h2><span>'+us.length+' pessoa(s)</span></div><button class="btn sm" data-fbunew="1">+ Novo login</button></div>'+(fbUsers?us.map(function(x){return '<div class="pjr"><button type="button" class="pjm" data-fbued="'+x.uid+'"><b>'+esc(x.nome||x.email)+(x.ativo===false?' · desativado':'')+'</b><span>'+esc(x.email||'')+' · '+tag(PERFIS[x.perfil]||x.perfil,x.perfil==='admin'?'ok':'')+'</span></button></div>';}).join(''):'<p class="note">Carregando…</p>')+'</div>'+permTab();}
+function permTab(){var ar=[['Orçamentos, funil, clientes, contratos','adm'],['Projetos, ficha técnica, tarefas, normas, agenda','adm aux'],['A pagar, fornecedores, conciliação','fin'],['A receber e fiscal','fin'],['CLT, PJ e folha','fin'],['Painel do mês, relatórios, Excel','fin'],['Senha, equipamentos e licenças','ti'],['Criar logins','ti']];
+  return '<div class="panel"><h2>O que cada perfil vê</h2><div class="tw" style="margin-top:10px"><table><thead><tr><th>Área</th><th>Adm.</th><th>RH/Fin.</th><th>Analista</th><th>TI</th><th>Aux.</th></tr></thead><tbody>'+ar.map(function(a){return '<tr><td>'+a[0]+'</td><td>✅</td>'+['fin','adm','ti','aux'].map(function(p){return '<td>'+(a[1].split(' ').indexOf(p)>=0?'✅':'—')+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table></div><p class="note" style="margin-top:8px">Só o administrador exclui registros. O Auxiliar vê os projetos sem valores.</p></div>';}
+function fbUForm(x){var n=!x;x=x||{nome:'',email:'',perfil:'adm',ativo:true};var ops=Object.keys(PERFIS).filter(function(k){return FB.perf==='admin'||k!=='admin';}).map(function(k){return [k,PERFIS[k]];});
+  m2(m2head(n?'Novo login':x.nome,n?'Acesso à nuvem':x.email)+'<div class="fg">'+fld('Nome','<input id="fu_nome" value="'+esc(x.nome||'')+'">')+(n?fld('E-mail','<input id="fu_email" type="email" value="">')+fld('Senha inicial (mín. 6)','<input id="fu_pw" type="text" autocomplete="off" value="">'):'')+fld('Perfil','<select id="fu_perf">'+sOpts(ops,x.perfil)+'</select>')+(n?'':fld('Situação','<select id="fu_at">'+sOpts([['1','Ativo'],['0','Desativado']],x.ativo===false?'0':'1')+'</select>'))+'</div>'+(n?'<p class="note" style="margin-top:8px">Passe o e-mail e a senha inicial para a pessoa. Ela entra pelo mesmo link do app.</p>':'')+'<div class="foot">'+(n?'':'<button class="btn ghost" type="button" data-fbupw="'+esc(x.email||'')+'">Enviar link de nova senha</button>')+'<button class="btn" type="button" data-fbusave="'+(n?'':x.uid)+'">Salvar</button></div><p class="fberr" id="fuerr"></p>','fbu');}
+document.addEventListener('click',function(ev){var t=ev.target,b;
+  if(t.closest('[data-fbrules]')){var ow=m2in('fbown');if(!/@/.test(ow)){toast('Coloque o seu e-mail.');return;}var c=fbCfg()||{};c.owner=ow;localStorage.setItem(FBK,JSON.stringify(c));copiar(fbRules(ow));return;}
+  if(t.closest('[data-fbgo]')){var er=document.getElementById('fbgoerr'),c2={apiKey:m2in('fbkey'),projectId:m2in('fbpid'),owner:m2in('fbown')},pw=(document.getElementById('fbpw')||{}).value||'';
+    if(!c2.apiKey||!c2.projectId||!/@/.test(c2.owner)){er.textContent='Preencha o e-mail (passo 4), a apiKey e o projectId (passo 5).';return;}if(pw.length<6){er.textContent='A senha precisa ter pelo menos 6 caracteres.';return;}
+    localStorage.setItem(FBK,JSON.stringify(c2));FB.cfg=c2;er.textContent='Conectando…';
+    fbAuth('accounts:signUp',{email:c2.owner,password:pw,returnSecureToken:true}).catch(function(e){if(/EMAIL_EXISTS/.test(e.message)){return null;}throw e;}).then(function(){return fbLogin(c2.owner,pw);})
+      .then(function(){er.textContent='Enviando os dados…';return fbWrite('usuarios',FB.sess.uid,{nome:'David',email:c2.owner,perfil:'admin',ativo:true});}).then(fbUpload).then(function(n){er.textContent='';toast('✓ '+n+' registros enviados para a nuvem');return fbStart();}).catch(function(e){er.textContent=fbErr(e&&e.message);});return;}
+  if(t.closest('[data-fbsair]')){fbSair();return;}
+  if(t.closest('[data-fblogin]')){loginShow();return;}
+  if(t.closest('[data-fbunew]')){fbUForm(null);return;}
+  if((b=t.closest('[data-fbued]'))){fbUForm((fbUsers||[]).filter(function(x){return x.uid===b.dataset.fbued;})[0]);return;}
+  if((b=t.closest('[data-fbupw]'))){fbAuth('accounts:sendOobCode',{requestType:'PASSWORD_RESET',email:b.dataset.fbupw}).then(function(){toast('Link de nova senha enviado para '+b.dataset.fbupw);}).catch(function(e){toast(fbErr(e.message));});return;}
+  if((b=t.closest('[data-fbusave]'))){var uid0=b.dataset.fbusave,er2=document.getElementById('fuerr'),nome=m2in('fu_nome'),perf=m2in('fu_perf');if(!nome){er2.textContent='Coloque o nome.';return;}
+    if(uid0){var x=(fbUsers||[]).filter(function(u){return u.uid===uid0;})[0];fbWrite('usuarios',uid0,{nome:nome,email:x.email,perfil:perf,ativo:m2in('fu_at')!=='0'}).then(function(){m2close();addLog('Login de '+nome+' atualizado ('+PERFIS[perf]+')');fbLoadUsers();toast('Salvo');}).catch(function(e){er2.textContent=fbErr(e.message);});return;}
+    var em=m2in('fu_email'),pw2=m2in('fu_pw');if(!/@/.test(em)){er2.textContent='Coloque o e-mail.';return;}if(pw2.length<6){er2.textContent='Senha inicial com pelo menos 6 caracteres.';return;}er2.textContent='Criando…';
+    fbAuth('accounts:signUp',{email:em,password:pw2,returnSecureToken:false}).then(function(j){return fbWrite('usuarios',j.localId,{nome:nome,email:em,perfil:perf,ativo:true});}).then(function(){m2close();addLog('Login criado: '+nome+' ('+PERFIS[perf]+')');fbLoadUsers();toast('Login criado para '+nome);}).catch(function(e){er2.textContent=fbErr(e.message);});return;}
+});
+/* ---- Auxiliar: esconde valores em R$ ---- */
+function fbMask(){if(!FB.on||FB.perf!=='aux'){return;}['view','modal','m2'].forEach(function(id){var el=document.getElementById(id);if(!el){return;}var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),n;while((n=w.nextNode())){if(/R\$\s?-?[\d.]+(,\d{2})?/.test(n.nodeValue)){n.nodeValue=n.nodeValue.replace(/R\$\s?-?[\d.]+(,\d{2})?/g,'R$ •••');}}el.querySelectorAll('[data-b="valor"],[data-b="desc"][data-n],[data-i$=".valor"]').forEach(function(i){i.type='password';i.readOnly=true;});});}
+(function(){var mo=new MutationObserver(function(){if(FB.on&&FB.perf==='aux'){mo.disconnect();fbMask();obs();}});var obs=function(){['view','modal','m2'].forEach(function(id){var el=document.getElementById(id);if(el){mo.observe(el,{childList:true,subtree:true,characterData:true});}});};setTimeout(obs,500);})();
+/* ---- início: se a nuvem estiver configurada, pede login ---- */
+setTimeout(function(){FB.cfg=fbCfg();if(!FB.cfg||!FB.cfg.apiKey){return;}var s=fbSessGet();
+  if(s){FB.sess=s;setSync('Conectando à nuvem…',true);fbStart().catch(function(e){if(/SEM_LOGIN|SESSAO|TOKEN|INVALID_REFRESH/.test(String(e&&e.message))){fbSessSet(null);loginShow('Sua sessão expirou. Entre de novo.');}else if(/Failed to fetch|NetworkError/.test(String(e&&e.message))){setSync('Sem internet · mostrando os dados deste aparelho',true);}else{fbSessSet(null);loginShow(e.message);}});}
+  else{loginShow();}},50);
+
 /* ---- cliques, mudanças e teclas das novas funções ---- */
 document.addEventListener('click',function(e){
   var t=e.target,b,fm=$('#fabm');
@@ -2407,7 +2555,7 @@ if(hasC){
   }).catch(function(){setSync('Salvo neste navegador',true);});
 }else{setSync('Salvo neste navegador',true);}
 setTimeout(function(){if(mode!=='db'){autoRun(false);}},600);
-setInterval(function(){autoRun(false);},1800000);
+setInterval(function(){if(mode!=='db'||ME.adm){autoRun(false);}},1800000);
 })();
 
 </script>
