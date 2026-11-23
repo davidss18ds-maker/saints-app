@@ -1,5 +1,5 @@
 /* Saints ERP - funciona offline. Mude a versão ao publicar uma atualização. */
-var CACHE = 'saints-erp-v22';
+var CACHE = 'saints-erp-v24';
 var CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', function (e) {

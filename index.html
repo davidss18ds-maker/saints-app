@@ -631,7 +631,7 @@ function renderModal(){
     foot=(!m.isNew&&isPJ(d)&&pago(d)>0?'<button class="btn ghost" type="button" data-act="recpj">Recibo de pagamento</button>':'')+(!m.isNew&&R&&pago(d)>0?'<button class="btn ghost" type="button" data-act="recibo">Recibo</button>':'')+(!m.isNew&&R&&saldo(d)>0&&tel(D.cli[d.cliId])?'<a class="btn ghost" target="_blank" rel="noopener" href="'+waHref(D.cli[d.cliId],cobMsg(d))+'">Cobrar no WhatsApp</a>':'');
   }
   if(t==='rcr'){title=m.isNew?'Nova despesa recorrente':d.desc;h='<div class="fg">'+fld('Descrição',inp('desc',d.desc,{ph:'Ex.: Licença mensal'}))+fld('Fornecedor',inp('forn',d.forn))+fld('Categoria',sel('cat',CATS.map(function(x){return [x,x];}),d.cat))+fld('Valor (R$)',inp('valor',d.valor,{n:1,mode:'decimal'}))+fld('Dia do vencimento (1 a 28)',inp('dia',d.dia,{n:1,mode:'numeric'}))+fld('Status',sel('ativo',[['sim','Ativa'],['nao','Pausada']],d.ativo||'sim'))+fld('Começa em (AAAA-MM)',inp('de',d.de||'',{ph:'2027-01'}))+fld('Vale até (opcional, AAAA-MM)',inp('ate',d.ate||'',{ph:'2027-12'}))+'</div>'+(d.cat==='Pessoal'?'<div class="sec"><h4>Dados do prestador PJ</h4><div class="fg">'+fld('Nome completo ou razão social',inp('razao',d.razao||''))+fld('CNPJ',inp('doc',d.doc||'',{ph:'00.000.000/0001-00',mode:'numeric'}))+fld('Serviço prestado',inp('serv',d.serv||'',{ph:'Ex.: Analista administrativa'}))+'</div></div>':'')+'<p class="note">Todo mês o sistema cria a conta a pagar sozinho, sem duplicar.</p>';}
-  if(t==='tar'){title=m.isNew?'Nova tarefa':d.titulo;sub=m.isNew?'':tag(TTIPO[d.tipo]?TTIPO[d.tipo][0]:'Tarefa','');h='<div class="fg">'+fld('Tarefa',inp('titulo',d.titulo))+fld('Para o dia',inp('venc',d.venc,{type:'date'}))+fld('Prioridade',sel('prio',PRIOS,d.prio||'normal'))+fld('Cliente (opcional)',sel('cliId',cliOpts(),d.cliId||''))+'</div><div class="sec">'+fld('Detalhes','<textarea data-b="det">'+esc(d.det||'')+'</textarea>')+'</div>';}
+  if(t==='tar'){title=m.isNew?'Nova tarefa':d.titulo;sub=m.isNew?'':tag(TTIPO[d.tipo]?TTIPO[d.tipo][0]:'Tarefa','');h='<div class="fg">'+fld('Tarefa',inp('titulo',d.titulo))+fld('Para o dia',inp('venc',d.venc,{type:'date'}))+fld('Prioridade',sel('prio',PRIOS,d.prio||'normal'))+respSel(d)+fld('Cliente (opcional)',sel('cliId',cliOpts(),d.cliId||''))+'</div><div class="sec">'+fld('Detalhes','<textarea data-b="det">'+esc(d.det||'')+'</textarea>')+'</div>';}
   if(t==='ctr'){title=m.isNew?'Novo contrato':'Contrato '+d.num;sub=m.isNew?'':tag((CST[d.status]||CST.rascunho)[0],(CST[d.status]||CST.rascunho)[1]);
     h='<div class="fg">'+fld('Cliente',sel('cliId',cliOpts(),d.cliId))+fld('Projeto',inp('titulo',d.titulo))+fld('Valor total (R$)',inp('valor',d.valor,{n:1,mode:'decimal'}))+fld('Sinal (%)',inp('sinal',d.sinal,{n:1,mode:'decimal'}))+fld('Prazo (dias úteis)',inp('prazoDias',d.prazoDias,{n:1,mode:'numeric'}))+fld('Forma de pagamento',sel('pgto',PGTOS,d.pgto||'Pix'))+fld('Revisões incluídas',inp('rev',d.rev,{n:1,mode:'numeric'}))+fld('Foro (cidade)',inp('foro',d.foro||''))+fld('Status',sel('status',Object.keys(CST).map(function(k){return [k,CST[k][0]];}),d.status))+fld('Data da assinatura',inp('assin',d.assin||'',{type:'date'}))+'</div><div class="sec"><h4>Texto do contrato</h4><textarea data-b="clausulas" style="min-height:260px;font-size:12px">'+esc(d.clausulas||ctrTexto(d))+'</textarea><div class="tools" style="margin-top:8px"><button class="btn ghost sm" type="button" data-act="ctrgen">Atualizar texto com os dados acima</button></div></div>';
     foot=(m.isNew?'':'<button class="btn ghost" data-act="ctrdl">Baixar contrato</button><button class="btn ghost" type="button" data-sign="1">✍ Assinar no celular</button>'+(d.ass?'<span class="tag ok" style="align-self:center">✓ Assinado por '+esc(d.ass.nome)+'</span>':'')+(d.status==='rascunho'?'<button class="btn ghost" data-act="ctrsend">Marcar como enviado</button>':'')+(d.status!=='assinado'&&d.status!=='encerrado'?'<button class="btn ok" data-act="ctrsign">Marcar como assinado</button>':'')+(tel(D.cli[d.cliId])?'<a class="btn ghost" target="_blank" rel="noopener" href="'+waHref(D.cli[d.cliId],'Olá! Segue o contrato '+d.num+' do projeto "'+d.titulo+'" para sua assinatura. Pode me enviar assinado por aqui. Obrigado!')+'">Enviar por WhatsApp</a>':''));}
@@ -1094,19 +1094,19 @@ function vAcc(){
   return meu+tb+how;
 }
 /* ---------- render principal ---------- */
-var NAV=[['','Visão geral'],['painel','Painel','◔'],['auto','Automação','⚡'],['','Comercial'],['orc','Orçamentos','▤'],['funil','Funil de vendas','⇶'],['preco','Calculadora de preço','∑'],['ctr','Contratos','§'],['cli','Clientes','☺'],['vrf','Análise de clientes','⛨'],['msg','Modelos de mensagem','✉'],['srv','Ficha técnica','☰'],['','Operação'],['prj','Projetos','◧'],['rot','Tarefas e rotinas','✓'],['bib','Normas e padrões','⌘'],['eqp','Equipamentos e licenças','⚙'],['','Financeiro'],['rec','A receber','↓'],['fisc','Fiscal e notas','▣'],['pag','A pagar','↑'],['forn','Fornecedores','⛁'],['conc','Conciliação bancária','⇄'],['pj','Equipe PJ','◈'],['clt','CLT e encargos','⚖'],['','Gestão'],['mes','Painel do mês','◷'],['rel','Relatórios','▥'],['xls','Excel','⊞'],['','Análises'],['agenda','Agenda','▦'],['caixa','Fluxo de caixa','≈'],['rent','Rentabilidade','◍'],['radar','Radar de clientes','◎'],['','Conta'],['acc','Acessos','⚿'],['nuvem','Nuvem e logins','☁'],['aud','Histórico de alterações','⟲'],['seg','Senha e backup','🔒'],['site','Site da Saints Projetos','↗']];
+var NAV=[['','Visão geral'],['painel','Painel','◔'],['auto','Automação','⚡'],['','Comercial'],['orc','Orçamentos','▤'],['funil','Funil de vendas','⇶'],['preco','Calculadora de preço','∑'],['ctr','Contratos','§'],['cli','Clientes','☺'],['vrf','Análise de clientes','⛨'],['msg','Modelos de mensagem','✉'],['srv','Ficha técnica','☰'],['','Operação'],['prj','Projetos','◧'],['rot','Tarefas e rotinas','✓'],['bib','Normas e padrões','⌘'],['eqp','Equipamentos e licenças','⚙'],['','Financeiro'],['rec','A receber','↓'],['fisc','Fiscal e notas','▣'],['pag','A pagar','↑'],['forn','Fornecedores','⛁'],['conc','Conciliação bancária','⇄'],['pj','Equipe PJ','◈'],['clt','CLT e encargos','⚖'],['','Gestão'],['mes','Painel do mês','◷'],['rel','Relatórios','▥'],['xls','Excel','⊞'],['','Análises'],['agenda','Agenda','▦'],['caixa','Fluxo de caixa','≈'],['rent','Rentabilidade','◍'],['radar','Radar de clientes','◎'],['','Conta'],['acc','Acessos','⚿'],['nuvem','Nuvem e logins','☁'],['seg','Senha e backup','🔒'],['site','Site da Saints Projetos','↗']];
 var NAVCOL=['prj','rot','agenda','cli','acc','site'];
 var SITE_PADRAO='https://claude.ai/artifact/1mbMGFD48KwDhhGzdR35Fd#play-15dd8cd198dd';
 function siteUrl(){var u=String((CFG&&CFG.site)||SITE_PADRAO||'').trim();if(u&&!/^https?:\/\//i.test(u)){u='https://'+u;}return u;}
 function navOk(k){return ME.adm||NAVCOL.indexOf(k)>=0;}
-var TTL={painel:'Painel',auto:'Automação',orc:'Orçamentos',cli:'Clientes',srv:'Ficha técnica de serviços',prj:'Projetos',rec:'Contas a receber',pag:'Contas a pagar',rel:'Relatórios',rot:'Tarefas e rotinas',ctr:'Contratos',fisc:'Fiscal e notas',ia:'Pergunte ao ERP',agenda:'Agenda',caixa:'Fluxo de caixa projetado',rent:'Rentabilidade e preço',radar:'Radar de clientes',meta:'Metas e capacidade',acc:'Acessos e equipe',pj:'Equipe PJ',clt:'CLT e encargos',forn:'Fornecedores',vrf:'Análise de clientes',funil:'Funil de vendas',preco:'Calculadora de preço',msg:'Modelos de mensagem',bib:'Normas e padrões',eqp:'Equipamentos e licenças',conc:'Conciliação bancária',mes:'Painel do mês',xls:'Excel',seg:'Senha e backup',nuvem:'Nuvem e logins',aud:'Histórico de alterações'};
+var TTL={painel:'Painel',auto:'Automação',orc:'Orçamentos',cli:'Clientes',srv:'Ficha técnica de serviços',prj:'Projetos',rec:'Contas a receber',pag:'Contas a pagar',rel:'Relatórios',rot:'Tarefas e rotinas',ctr:'Contratos',fisc:'Fiscal e notas',ia:'Pergunte ao ERP',agenda:'Agenda',caixa:'Fluxo de caixa projetado',rent:'Rentabilidade e preço',radar:'Radar de clientes',meta:'Metas e capacidade',acc:'Acessos e equipe',pj:'Equipe PJ',clt:'CLT e encargos',forn:'Fornecedores',vrf:'Análise de clientes',funil:'Funil de vendas',preco:'Calculadora de preço',msg:'Modelos de mensagem',bib:'Normas e padrões',eqp:'Equipamentos e licenças',conc:'Conciliação bancária',mes:'Painel do mês',xls:'Excel',seg:'Senha e backup',nuvem:'Nuvem e logins'};
 function cnt(v){if(v==='orc'){return L('orc').filter(function(o){return o.status==='enviado';}).length;}if(v==='prj'){return L('prj').filter(function(p){return p.status!=='entregue';}).length;}if(v==='rec'){return L('tit').filter(function(t){return t.tipo==='R'&&tstat(t)==='vencido';}).length;}if(v==='rot'){return tdue();}if(v==='ctr'){return L('ctr').filter(function(c){return c.status==='rascunho'||c.status==='enviado';}).length;}if(v==='auto'){return ao('alerta')?pend().length:0;}if(v==='funil'){return leadFU().length;}if(v==='eqp'){return eqpAlert().length;}if(v==='pj'){return L('tit').filter(function(t){return isPJ(t)&&tstat(t)==='pago'&&!t.nf&&!pjNotas(t.id).length;}).length;}return 0;}
 function render(){
   if(!navOk(ui.view)){ui.view='prj';}
   var nv=NAV.filter(function(n){return !n[2]||navOk(n[0]);}).filter(function(n,i,a){return n[2]||(a[i+1]&&a[i+1][2]);});
   $('#nav').innerHTML=nv.map(function(n){if(!n[2]){return '<div class="grp">'+n[1]+'</div>';}if(n[0]==='site'&&siteUrl()){return '<a class="nv" style="text-decoration:none" href="'+esc(siteUrl())+'" target="_blank" rel="noopener"><i>'+n[2]+'</i>'+n[1]+'</a>';}var c=cnt(n[0]);return '<button class="nv" data-nav="'+n[0]+'"'+(ui.view===n[0]?' aria-current="page"':'')+'><i>'+n[2]+'</i>'+n[1]+(c?'<em>'+c+'</em>':'')+'</button>';}).join('');
   $('#ttl').textContent=TTL[ui.view];
-  var v=ui.view;$('#view').innerHTML=v==='painel'?vPainelX():v==='orc'?vOrc():v==='cli'?vCli():v==='srv'?vSrv():v==='prj'?vPrj():v==='rec'?vFin('R'):v==='pag'?vFin('P'):v==='pj'?vPJ():v==='clt'?vCLT():v==='forn'?vForn():v==='vrf'?vVrf():v==='rel'?vRel():v==='rot'?vRot():v==='ctr'?vCtr():v==='fisc'?vFisc():v==='ia'?vIA():v==='agenda'?evtBox()+vAgenda():v==='funil'?vFunil():v==='preco'?vPreco():v==='msg'?vMsg():v==='bib'?vBib():v==='eqp'?vEqp():v==='conc'?vConc():v==='mes'?vMes():v==='xls'?vXls():v==='seg'?vSeg():v==='caixa'?vCaixa():v==='rent'?vRent():v==='radar'?vRadar():v==='meta'?vMeta()+conqHtml(true):v==='acc'?vAccFb():v==='nuvem'?vNuvem():v==='aud'?vAud():vAuto();
+  var v=ui.view;$('#view').innerHTML=v==='painel'?vPainelX():v==='orc'?vOrc():v==='cli'?vCli():v==='srv'?vSrv():v==='prj'?vPrj():v==='rec'?vFin('R'):v==='pag'?vFin('P'):v==='pj'?vPJ():v==='clt'?vCLT():v==='forn'?vForn():v==='vrf'?vVrf():v==='rel'?vRel():v==='rot'?vRot():v==='ctr'?vCtr():v==='fisc'?vFisc():v==='ia'?vIA():v==='agenda'?evtBox()+vAgenda():v==='funil'?vFunil():v==='preco'?vPreco():v==='msg'?vMsg():v==='bib'?vBib():v==='eqp'?vEqp():v==='conc'?vConc():v==='mes'?vMes():v==='xls'?vXls():v==='seg'?vSeg():v==='caixa'?vCaixa():v==='rent'?vRent():v==='radar'?vRadar():v==='meta'?vMeta()+conqHtml(true):v==='acc'?vAccFb():v==='nuvem'?vNuvem():vAuto();
   if(!ME.adm){var nb=document.querySelectorAll('[data-new="prj"]');for(var z=0;z<nb.length;z++){nb[z].remove();}}
   renderBanner();tabbarRender();bkNag();
 }
@@ -1257,7 +1257,7 @@ setInterval(tmrTick,1000);
 /* ---- projeto: extras ---- */
 function prjExtras(d){
   var r=d.tmr,h='<div class="sec"><h4>Cronômetro</h4><div class="tools"><button class="btn '+(r?'':'ok')+'" type="button" data-tmr="'+d.id+'">'+(r?'❚❚ Pausar e apontar':'▶ Iniciar cronômetro')+'</button>'+(r?'<b data-tmrv="'+d.id+'" style="font-size:22px;font-variant-numeric:tabular-nums">'+fmtT(Date.now()-r)+'</b>':'<span class="note" style="margin:0">As horas entram sozinhas no apontamento.</span>')+'</div></div>';
-  h+=saudeBox(d)+revBox(d)+fileBox(d)+anxHtml('prj',d.id);
+  h+=aprovBox(d)+saudeBox(d)+revBox(d)+fileBox(d)+anxHtml('prj',d.id);
   if(d.status==='entregue'){if(!d.aval){d.aval={n:0,c:''};}h+='<div class="sec"><h4>Avaliação do cliente</h4><div class="stars">'+[1,2,3,4,5].map(function(n){return '<button type="button" data-star="'+n+'" aria-label="'+n+' estrela'+(n>1?'s':'')+'" class="'+(n<=(d.aval.n||0)?'on':'')+'">★</button>';}).join('')+'</div>'+fld('Comentário do cliente','<input data-b="aval.c" value="'+esc(d.aval.c||'')+'" placeholder="O que o cliente disse">')+'</div>';}
   h+=npsBox(d);
   return h;
@@ -1320,7 +1320,7 @@ function vPainelX(){
   var hello=top.slice(0,iM),parts={minis:top.slice(iM,iP),prio:top.slice(iP)},g=rest.split('<div class="g2">');
   parts.kpis=g[0];parts.caixa=g[1]?'<div class="g2">'+g[1]:'';parts.funil=g[2]?'<div class="g2">'+g[2]:'';parts.semana=semanaHtml();
   hello=hello.replace('</div></div>','</div><div class="hbtn"><button class="btn ghost sm" type="button" data-fab="orc">+ Orçamento</button><button class="btn ghost sm" type="button" data-pcfg="1">⚙ Personalizar</button></div></div>');
-  var c=painelCfg();return hello+c.ordem.filter(function(k){return c.ocultos.indexOf(k)<0;}).map(function(k){return parts[k]||'';}).join('');
+  var c=painelCfg();return hello+minhasBox()+c.ordem.filter(function(k){return c.ocultos.indexOf(k)<0;}).map(function(k){return parts[k]||'';}).join('');
 }
 function pcfgOpen(){var c=painelCfg();m2(m2head('Personalizar painel','Deixe em cima o que você olha todo dia')+c.ordem.map(function(k,i){var n=PAINEL.filter(function(p){return p[0]===k;})[0][1],on=c.ocultos.indexOf(k)<0;return '<div class="sw"><div><b>'+n+'</b></div><button class="btn ghost sm" type="button" data-pmv="'+k+':-1" '+(i?'':'disabled')+' aria-label="Subir">↑</button><button class="btn ghost sm" type="button" data-pmv="'+k+':1" '+(i<c.ordem.length-1?'':'disabled')+' aria-label="Descer">↓</button><button class="tg" type="button" role="switch" aria-checked="'+on+'" data-pon="'+k+'" aria-label="Mostrar '+n+'"></button></div>';}).join('')+'<div class="foot"><button class="btn" type="button" data-m2x="1">Pronto</button><button class="btn ghost" type="button" data-preset="1">Voltar ao padrão</button></div>','pcfg');}
 
@@ -2319,7 +2319,7 @@ function siteSync(manual){
   siteBusy=true;
   return fetch(u+(u.indexOf('?')>=0?'&':'?')+'token='+encodeURIComponent(siteTok())+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){
     siteBusy=false;if(!j||!j.ok){if(manual){toast('A planilha recusou o acesso. Confira se colou o código novo.');}CFG.siteErr=TD();saveCfg();return 0;}
-    var n=0;(j.pedidos||[]).forEach(function(p){if(!p.id){return;}var id='site_'+String(p.id).replace(/[^a-zA-Z0-9-]/g,'');if(D.lead[id]){return;}
+    var n=0;(j.pedidos||[]).forEach(function(p){if(!p.id){return;}if(p.tipo==='APROVACAO'){apAplicar(p);return;}var id='site_'+String(p.id).replace(/[^a-zA-Z0-9-]/g,'');if(D.lead[id]){return;}
       put('lead',{id:id,nome:String(p.nome||'Pedido do site'),tel:String(p.tel||''),email:String(p.email||''),origem:'Site',etapa:'contato',valor:0,prox:TD(),criado:String(p.data||'').slice(0,10)||TD(),obs:[p.tipo,p.prazo?'Prazo: '+p.prazo:'',p.origem?'Conheceu por: '+p.origem:'',p.desc].filter(function(x){return x;}).join(' · ')});n++;});
     CFG.siteLast=new Date().toISOString();delete CFG.siteErr;saveCfg();
     if(n){addLog(n+' pedido(s) novo(s) do site no Funil');toast('🔔 '+n+' pedido(s) novo(s) do site no Funil!');try{if(navigator.vibrate){navigator.vibrate(200);}}catch(e){}}else if(manual){toast('Conectado. Nenhum pedido novo.');}
@@ -2445,7 +2445,7 @@ function fbUpload(){var o;try{o=JSON.parse(localStorage.getItem(LS)||'null');}ca
   return go().then(function(n){if(big){toast(big+' anexo(s) grande(s) ficaram só no aparelho.');}return n;});}
 /* ---- tela de configuração (administrador) ---- */
 function vNuvem(){var c=fbCfg()||{};
-  if(FB.on){return '<div class="panel" style="margin-bottom:14px"><h2>☁ Nuvem ligada</h2><div class="okbox" style="margin-top:12px">✓ Conectado ao projeto <b>'+esc(c.projectId)+'</b> como '+esc(FB.nome)+' ('+PERFIS[FB.perf]+').</div><p class="note">Os logins da equipe ficam em <b>Acessos</b>. Quando o app pedir, copie as regras de novo e publique no Firebase (Firestore → Regras).</p><div class="foot" style="margin-bottom:10px"><input id="fbown" type="hidden" value="'+esc(c.owner||'')+'"><button class="btn sm" data-fbrules="1">📋 Copiar regras atualizadas</button></div><div class="foot"><button class="btn ghost" data-nav="acc">Ir para Acessos</button><button class="btn ghost" data-fbsair="1">Sair deste aparelho</button></div></div>';}
+  if(FB.on){return '<div class="panel" style="margin-bottom:14px"><h2>☁ Nuvem ligada</h2><div class="okbox" style="margin-top:12px">✓ Conectado ao projeto <b>'+esc(c.projectId)+'</b> como '+esc(FB.nome)+' ('+PERFIS[FB.perf]+').</div><p class="note">Os logins da equipe ficam em <b>Acessos</b>.</p><div class="foot" style="margin-bottom:10px"><input id="fbown" type="hidden" value="'+esc(c.owner||'')+'"><button class="btn sm" data-fbrules="1">📋 Copiar regras atualizadas</button></div><div class="foot"><button class="btn ghost" data-nav="acc">Ir para Acessos</button><button class="btn ghost" data-fbsair="1">Sair deste aparelho</button></div></div>';}
   return '<div class="panel" style="margin-bottom:14px"><h2>☁ Nuvem e logins da equipe</h2><p class="note" style="margin:8px 0 0">Coloca os dados no Firebase, um serviço gratuito do Google, para cada pessoa entrar com o próprio login e ver só o que o perfil dela permite. Faça uma vez só; leva uns 20 minutos.</p><ol class="stp">'+
   '<li>No Chrome (modo computador), abra <b>console.firebase.google.com</b> e toque em <b>Criar um projeto</b>. Nome: <b>saints-erp</b>. Pode desligar o Google Analytics.</li>'+
   '<li>No menu, abra <b>Authentication → Vamos começar → E-mail/senha</b>, ative a primeira opção e salve.</li>'+
@@ -2508,50 +2508,68 @@ document.addEventListener('click',function(ev){var t=ev.target,b;
 });
 function meuNome(){try{if(FB&&FB.on&&FB.nome){return String(FB.nome).trim().split(/\s+/)[0];}}catch(e){}return 'David';}
 
-/* ===================== v18: histórico de alterações (auditoria) ===================== */
+/* v18: Painel também para os Auxiliares */
 PNAV.aux.unshift('painel');
-FB.snap={};
-var ANOME={cli:'Cliente',srv:'Ficha técnica',orc:'Orçamento',prj:'Projeto',tit:'Conta',rcr:'Despesa recorrente',tar:'Tarefa',ctr:'Contrato',anx:'Anexo',forn:'Fornecedor',vrf:'Análise de cliente',lead:'Contato do funil',evt:'Reunião/visita',bib:'Norma',eqp:'Equipamento',cfg:'Configurações'};
-var CNOME={status:'status',valor:'valor',itens:'itens',venc:'vencimento',bx:'pagamentos',titulo:'título',nome:'nome',desc:'descrição',prazo:'prazo',cliId:'cliente',tel:'telefone',email:'e-mail',obs:'observações',etapa:'etapa',ap:'horas',ck:'checklist',revs:'revisões',nf:'nota fiscal',forn:'fornecedor',cat:'categoria',clt:'funcionários CLT',folhas:'folha',pix:'chave Pix',msgs:'mensagens',burs:'empresas de consulta',ass:'assinatura'};
-function audLabel(c,v,id){if(!v){return id;}if(c==='tit'){return (v.num||'')+(v.desc?' · '+v.desc:'');}if(c==='orc'||c==='prj'||c==='ctr'){return (v.num?v.num+' · ':'')+(v.titulo||'');}if(c==='anx'){return v.nome||'arquivo';}if(c==='tar'){return v.titulo||v.txt||v.t||id;}return v.nome||v.titulo||v.tit||v.cod||v.desc||id;}
-function audDiff(a,b){var out=[];var ks={};Object.keys(a||{}).concat(Object.keys(b||{})).forEach(function(k){ks[k]=1;});Object.keys(ks).forEach(function(k){if(k==='id'||k==='_ts'||k==='seq'||k==='ultimaRot'){return;}if(JSON.stringify((a||{})[k])!==JSON.stringify((b||{})[k])){out.push(k);}});return out;}
-function audit(c,id,v,acao){
-  if(!FB.on||c==='log'||c==='del'||c==='aud'){return;}
-  var key=c+'/'+id,prev=FB.snap[key]?JSON.parse(FB.snap[key]):null,campos=[];
-  if(acao!=='excluiu'){if(!prev){acao='criou';}else{campos=audDiff(prev,v);if(!campos.length){return;}acao='alterou';}}
-  FB.snap[key]=acao==='excluiu'?null:JSON.stringify(v);
-  var sys=!!(FB.sysK&&FB.sysK[key]);
-  var bucket=Math.floor(Date.now()/120000),aid=(FB.sess.uid+'_'+c+'_'+id+'_'+bucket).replace(/[^A-Za-z0-9_\-]/g,'_');
-  var old=FB.audMem&&FB.audMem[aid];if(old&&old.acao==='criou'&&acao==='alterou'){acao='criou';}
-  var cs=old?old.campos.concat(campos).filter(function(x,i,a){return a.indexOf(x)===i;}):campos;
-  var doc={ts:Date.now(),uid:FB.sess.uid,nome:sys?'Automação do app':FB.nome,perfil:sys?'auto':FB.perf,acao:acao,c:c,id:String(id),rot:String(audLabel(c,acao==='excluiu'&&prev?prev:v,id)).slice(0,140),campos:cs.slice(0,15)};
-  FB.audMem=FB.audMem||{};FB.audMem[aid]=doc;
-  fbWrite('aud',aid,doc).catch(function(){});
-}
-/* guarda o estado conhecido do servidor para saber o que mudou */
-var fbSet0=fbSet;fbSet=function(c,arr){arr.forEach(function(d){FB.snap[c+'/'+d.id]=JSON.stringify(d.v);});return fbSet0(c,arr);};
-var dbDoc0=FBDB.doc;FBDB.doc=function(path){var p=path.split('/'),c=p[0],id=p.slice(1).join('/'),d=dbDoc0(path);return {
-  set:function(v){var r=d.set(v);if(c==='cfg'){if(canW('cfg')){audit('cfg','main',cfgSplit(v).m,'alterou');}if(FB.perf==='admin'||FB.perf==='fin'){audit('cfg','rh',cfgSplit(v).rh,'alterou');}}else if(canW(c)){audit(c,id,v,'alterou');}return r;},
-  'delete':function(){if(FB.perf==='admin'){audit(c,id,null,'excluiu');}return d['delete']();}};};
-var audF={u:'',c:'',d:''},audList=null,audBusy=false,audLim=300;
-function audLoad(){if(!FB.on||audBusy){return;}audBusy=true;fbReq('POST',fbBase()+':runQuery',{structuredQuery:{from:[{collectionId:'aud'}],orderBy:[{field:{fieldPath:'ts'},direction:'DESCENDING'}],limit:audLim}}).then(function(arr){audBusy=false;audList=(arr||[]).filter(function(x){return x.document;}).map(function(x){return docObj(x.document).v;});render();}).catch(function(e){audBusy=false;audList=[];toast(/sem permissão|PERMISSION/.test(String(e.code||e.message))?'Atualize as regras do Firebase (veja o aviso na tela).':fbErr(e.message));render();});}
-function vAud(){
-  if(!FB.on){return '<div class="panel">'+empty('O histórico de alterações funciona com a nuvem ligada (Mais → Nuvem e logins).')+'</div>';}
-  if(!audList){audLoad();return '<div class="panel"><p class="note">Carregando o histórico…</p></div>';}
-  var us={},cs={};audList.forEach(function(a){if(a.perfil!=='auto'){us[a.uid]=a.nome;}cs[a.c]=1;});us.auto='Automação do app';
-  var it=audList.filter(function(a){return (!audF.u||(audF.u==='auto'?a.perfil==='auto':(a.uid===audF.u&&a.perfil!=='auto')))&&(!audF.c||a.c===audF.c)&&(!audF.d||new Date(a.ts).toISOString().slice(0,10)===audF.d);});
-  var hoje=TD(),por={};it.forEach(function(a){var d=new Date(a.ts),k=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);(por[k]=por[k]||[]).push(a);});
-  var ic={criou:['＋','ok'],alterou:['✎','info'],excluiu:['✕','bad']};
-  return '<div class="panel" style="margin-bottom:14px"><div class="fg">'+fld('Pessoa','<select data-audf="u">'+sOpts([['','Todas']].concat(Object.keys(us).map(function(k){return [k,us[k]];})),audF.u)+'</select>')+fld('Área','<select data-audf="c">'+sOpts([['','Todas']].concat(Object.keys(cs).sort().map(function(k){return [k,ANOME[k]||k];})),audF.c)+'</select>')+fld('Dia','<input type="date" data-audf="d" value="'+esc(audF.d)+'">')+'</div><div class="foot" style="margin-top:10px"><button class="btn ghost sm" data-audr="1">↻ Atualizar</button>'+(audF.u||audF.c||audF.d?'<button class="btn ghost sm" data-audx="1">Limpar filtros</button>':'')+'</div></div>'+
-  (it.length?Object.keys(por).sort().reverse().map(function(k){return '<div class="panel" style="margin-bottom:12px"><h2>'+(k===hoje?'Hoje':k===plus(-1)?'Ontem':fd(k))+' <span style="font-size:13px;color:var(--muted)">'+por[k].length+'</span></h2>'+por[k].map(function(a){var d=new Date(a.ts),h=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2),x=ic[a.acao]||ic.alterou,ok=a.c!=='cfg'&&a.acao!=='excluiu'&&D[a.c]&&D[a.c][a.id];
-    return '<div class="pjr"><div class="audic '+x[1]+'">'+x[0]+'</div><button type="button" class="pjm" '+(ok?'data-open="'+a.c+':'+esc(a.id)+'"':'style="cursor:default"')+'><b>'+esc(a.nome||'?')+' '+esc(a.acao)+' '+esc((ANOME[a.c]||a.c).toLowerCase())+'</b><span>'+esc(a.rot||'')+'</span><span>'+h+' · '+esc(a.perfil==='auto'?'rotina automática':(PERFIS[a.perfil]||a.perfil||''))+(a.campos&&a.campos.length?' · mudou: '+esc(a.campos.map(function(f){return CNOME[f]||f;}).join(', ')):'')+'</span></button></div>';}).join('')+'</div>';}).join('')+(audList.length>=audLim?'<div class="foot"><button class="btn ghost" data-audmais="1">Carregar mais</button></div>':''):'<div class="panel">'+empty(audList.length?'Nada com esses filtros.':'Ainda não há alterações registradas. A partir de agora, tudo o que a equipe fizer aparece aqui.')+'</div>')+
-  '<p class="note">Atualize as regras do Firebase uma vez para o histórico funcionar: Mais → Nuvem e logins → Copiar regras, e cole de novo em Firestore → Regras → Publicar.</p>';
-}
-document.addEventListener('click',function(ev){var t=ev.target;if(t.closest('[data-audr]')){audList=null;render();return;}if(t.closest('[data-audx]')){audF={u:'',c:'',d:''};render();return;}if(t.closest('[data-audmais]')){audLim+=300;audList=null;render();return;}});
-document.addEventListener('change',function(ev){var t=ev.target;if(t.dataset&&t.dataset.audf){audF[t.dataset.audf]=t.value;render();}});
-/* o que o próprio app faz sozinho (rotinas automáticas) aparece como "Automação" */
-var autoRun0=autoRun;autoRun=function(){FB.sys=true;try{return autoRun0.apply(this,arguments);}finally{setTimeout(function(){FB.sys=false;},0);}};
-FB.sysK={};var persist0=persist;persist=function(c,id){if(FB.on){FB.sysK[c+'/'+id]=!!FB.sys;}return persist0(c,id);};
+
+/* ===================== v19: tarefas para alguém + aprovação do cliente ===================== */
+['fin','ti'].forEach(function(p){if(PR[p].indexOf('tar')<0){PR[p].push('tar');}if(PW[p].indexOf('tar')<0){PW[p].push('tar');}if(PNAV[p].indexOf('rot')<0){PNAV[p].splice(PNAV[p].length-2,0,'rot');}});
+if(PNAV.ti.indexOf('painel')<0){PNAV.ti.unshift('painel');}
+function meuUid(){return FB.on&&FB.sess?FB.sess.uid:'';}
+function equipe(){return (CFG&&CFG.equipe)||[];}
+function eqNome(uid){var e=equipe().filter(function(x){return x.uid===uid;})[0];return e?e.nome:'';}
+/* o administrador mantém a lista da equipe nas configurações, para todos poderem atribuir tarefas */
+var fbLoadUsers0=fbLoadUsers;fbLoadUsers=function(){return fbLoadUsers0().then(function(){if(FB.perf!=='admin'||!fbUsers){return;}var eq=fbUsers.filter(function(u){return u.ativo!==false;}).map(function(u){return {uid:u.uid,nome:u.nome||u.email,perfil:u.perfil};}).sort(function(a,b){return a.nome.localeCompare(b.nome);});if(JSON.stringify(eq)!==JSON.stringify(CFG.equipe||[])){CFG.equipe=eq;saveCfg();}});};
+setTimeout(function chk(){if(FB.on&&FB.perf==='admin'&&!(CFG.equipe&&CFG.equipe.length)){fbLoadUsers();}else if(!FB.on){setTimeout(chk,4000);}},6000);
+/* tarefa: mostra o responsável e permite trocar */
+var tkRow0=tkRow;tkRow=function(tk){var h=tkRow0(tk),n=tk.resp?(eqNome(tk.resp)||tk.respNome||'?'):'';
+  if(n){h=h.replace('<b>','<b>'+tag('👤 '+(tk.resp===meuUid()?'Você':n.split(' ')[0]),tk.resp===meuUid()?'ok':'info')+' ');}
+  if(equipe().length&&tk.status==='aberta'){h=h.replace('<div class="tka">','<div class="tka"><button class="btn ghost sm" data-tkresp="'+tk.id+'" title="Mudar responsável">👤</button>');}
+  if(tk.de&&tk.de!==meuUid()){h=h.replace('</span></div><div class="tka">',' · pedido por '+esc((eqNome(tk.de)||tk.deNome||'').split(' ')[0])+'</span></div><div class="tka">');}
+  return h;};
+var vRot0=vRot;vRot=function(){
+  if(!FB.on||!equipe().length){return vRot0();}
+  var me=meuUid(),f=ui.tq||(FB.perf==='admin'?'todas':'minhas'),all=D.tar,ab=L('tar').filter(function(t){return t.status==='aberta';});
+  var n={minhas:ab.filter(function(t){return t.resp===me;}).length,dei:ab.filter(function(t){return t.de===me&&t.resp&&t.resp!==me;}).length,livres:ab.filter(function(t){return !t.resp;}).length};
+  var bar='<div class="tools" style="margin-bottom:6px">'+[['todas','Todas'],['minhas','Minhas ('+n.minhas+')'],['dei','Que eu pedi ('+n.dei+')'],['livres','Sem responsável ('+n.livres+')']].map(function(x){return '<button class="chip" data-tq="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>';}).join('')+'</div>';
+  if(f!=='todas'){var sub={};Object.keys(all).forEach(function(k){var t=all[k];if((f==='minhas'&&t.resp===me)||(f==='dei'&&t.de===me&&t.resp&&t.resp!==me)||(f==='livres'&&!t.resp)){sub[k]=t;}});D.tar=sub;}
+  try{return bar+vRot0();}finally{D.tar=all;}
+};
+/* campo "Para quem" no formulário da tarefa */
+function respSel(d){var eq=equipe();if(!eq.length){return '';}return fld('Para quem',sel('resp',[['','Ninguém (geral)']].concat(eq.map(function(e){return [e.uid,e.nome+(e.uid===meuUid()?' (você)':'')];})),d.resp||''));}
+/* quem pediu: grava ao salvar uma tarefa nova atribuída a outra pessoa */
+var put0=put;put=function(c,o){if(c==='tar'&&o&&FB.on){var old=D.tar[o.id];if(o.resp&&(!old||old.resp!==o.resp)){o.de=meuUid();o.deNome=FB.nome;o.respNome=eqNome(o.resp);}if(!o.resp){delete o.respNome;}}return put0(c,o);};
+function tkRespForm(id){var t=D.tar[id];if(!t){return;}m2(m2head('Para quem é esta tarefa?',t.titulo)+'<div class="fg">'+fld('Responsável','<select id="tk_resp">'+sOpts([['','Ninguém (geral)']].concat(equipe().map(function(e){return [e.uid,e.nome];})),t.resp||'')+'</select>')+'</div><div class="foot"><button class="btn" type="button" data-tkrsave="'+id+'">Salvar</button></div>','tkr');}
+/* painel: "Suas tarefas" para quem tem tarefas atribuídas */
+function minhasBox(){if(!FB.on||!equipe().length){return '';}var me=meuUid(),ts=L('tar').filter(function(t){return t.status==='aberta'&&t.resp===me;}).sort(function(a,b){return (a.venc||'').localeCompare(b.venc||'');});if(!ts.length){return '';}
+  return '<div class="panel" style="margin-bottom:14px"><div class="pjh"><div style="flex:1"><h2 style="margin:0">📋 Suas tarefas</h2><span>'+ts.length+' em aberto'+(ts.filter(function(t){return t.venc<TD();}).length?' · '+ts.filter(function(t){return t.venc<TD();}).length+' atrasada(s)':'')+'</span></div><button class="btn ghost sm" data-nav="rot">Ver todas</button></div>'+ts.slice(0,5).map(function(t){var late=t.venc<TD();return '<div class="pjr"><div class="pjm" style="cursor:default"><b>'+esc(t.titulo)+'</b><span class="'+(late?'bad':'')+'">'+(late?'⚠ Atrasada desde ':'Para ')+fd(t.venc)+(t.de&&t.de!==me?' · pedido por '+esc((eqNome(t.de)||t.deNome||'').split(' ')[0]):'')+'</span>'+(t.det?'<span>'+esc(t.det.slice(0,100))+'</span>':'')+'</div><button class="btn sm" data-tk="done:'+t.id+'">Feito</button></div>';}).join('')+'</div>';}
+/* aviso quando chega tarefa nova para mim (vindo da nuvem) */
+var fbPollT=fbPoll;fbPoll=function(){if(!FB.on||document.hidden||wq.length||wBusy){return;}var me=meuUid(),antes={};L('tar').forEach(function(t){antes[t.id]=t.resp;});fbPollT();setTimeout(function(){L('tar').forEach(function(t){if(t.resp===me&&antes[t.id]!==me&&t.status==='aberta'&&t.de!==me){toast('📋 Nova tarefa'+(t.deNome?' de '+t.deNome.split(' ')[0]:'')+': '+t.titulo);try{if(navigator.vibrate){navigator.vibrate([150,80,150]);}}catch(e){}}});},4000);};
+document.addEventListener('click',function(ev){var t=ev.target,b;
+  if((b=t.closest('[data-tq]'))){ui.tq=b.dataset.tq;render();return;}
+  if((b=t.closest('[data-tkresp]'))){tkRespForm(b.dataset.tkresp);return;}
+  if((b=t.closest('[data-tkrsave]'))){var o=clone(D.tar[b.dataset.tkrsave]);o.resp=m2in('tk_resp');put('tar',o);m2close();render();toast(o.resp?'Tarefa enviada para '+eqNome(o.resp).split(' ')[0]:'Tarefa sem responsável');return;}
+});
+
+/* ---------- 5: aprovação do desenho pelo cliente ---------- */
+function apLink(p){var c=D.cli[p.cliId]||{},o={i:p.id,n:p.num||'',t:p.titulo||'',c:(c.nome||'').replace(/\(exemplo\)/i,'').trim(),w:digits(c.tel||''),l:p.linkAprov||'',v:(p.revs||[]).length?String.fromCharCode(64+(p.revs||[]).length):''};var b=btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');return location.origin+location.pathname.replace(/[^\/]*$/,'')+'aprovar.html#'+b;}
+function aprovBox(d){if(!d||!d.id||!D.prj[d.id]){return '';}var c=D.cli[d.cliId]||{},a=d.aprovCli,st='';
+  if(a&&a.ok===true){st='<div class="okbox">✓ Aprovado pelo cliente em '+fd(a.d)+(a.txt?' · "'+esc(a.txt)+'"':'')+'</div>';}
+  else if(a&&a.ok===false){st='<div class="warnbox">✎ Cliente pediu ajuste em '+fd(a.d)+(a.txt?': "'+esc(a.txt)+'"':'')+'</div>';}
+  else if(d.aprovEnv){st='<div class="note" style="margin:0 0 10px">⏳ Enviado para aprovação em '+fd(d.aprovEnv)+'. Aguardando o cliente.</div>';}
+  return '<div class="sec"><h4>Aprovação do cliente</h4>'+st+'<div class="fg">'+fld('Link do desenho em PDF (Google Drive)',inp('linkAprov',d.linkAprov||'',{ph:'https://drive.google.com/…'}))+'</div><p class="note" style="margin:6px 0 8px">No Google Drive, toque em ⋮ no PDF → Compartilhar → "Qualquer pessoa com o link" → Copiar link. Cole aqui.</p><div class="tools">'+(tel(c)?'<button class="btn sm" type="button" data-apenv="'+d.id+'">📨 Enviar para o cliente aprovar</button>':'<span class="note">Cadastre o WhatsApp do cliente para enviar.</span>')+'<button class="btn ghost sm" type="button" data-apcopy="'+d.id+'">Copiar link</button></div>'+(CFG.siteUrlGas?'':'<p class="note" style="margin-top:8px">Para a resposta cair sozinha no app, ligue os "Pedidos do site" no Funil de vendas.</p>')+'</div>';}
+/* respostas de aprovação chegam pela mesma planilha dos pedidos do site */
+function apAplicar(p){var info;try{info=JSON.parse(p.desc||'{}');}catch(e){return false;}var pr=D.prj[info.i];if(!pr){return true;}var ids=pr.aprovIds||[];if(ids.indexOf(String(p.id))>=0){return true;}
+  var o=clone(pr),ok=info.d==='ok';o.aprovIds=ids.concat([String(p.id)]);o.aprovCli={ok:ok,txt:String(info.m||'').slice(0,500),d:String(p.data||'').slice(0,10)||TD()};put('prj',o);
+  addLog((ok?'Cliente aprovou ':'Cliente pediu ajuste em ')+(o.num||'')+' '+o.titulo);
+  if(!ok){put('tar',{id:'ap_'+String(p.id).replace(/[^A-Za-z0-9_\-]/g,''),tipo:'man',titulo:'Ajuste pedido pelo cliente · '+o.titulo,det:String(info.m||''),venc:TD(),prio:'alta',status:'aberta',criada:TD(),cliId:o.cliId||''});}
+  toast(ok?'✅ '+(D.cli[o.cliId]?D.cli[o.cliId].nome.split(' ')[0]:'Cliente')+' aprovou "'+o.titulo+'"':'✎ Pedido de ajuste em "'+o.titulo+'"');try{if(navigator.vibrate){navigator.vibrate(200);}}catch(e){}return true;}
+document.addEventListener('click',function(ev){var t=ev.target,b;
+  if((b=t.closest('[data-apenv]'))||(b=t.closest('[data-apcopy]'))){var id=b.dataset.apenv||b.dataset.apcopy;if(ui.draft&&ui.draft.id===id){if(!saveM()){return;}ui.draft=clone(ui.draft);}var p=D.prj[id];if(!p){return;}
+    if(!p.linkAprov){toast('Cole primeiro o link do PDF do desenho.');return;}var url=apLink(p);
+    if(b.dataset.apcopy){copiar(url);return;}
+    var c=D.cli[p.cliId],msg='Olá, '+(c.contato||c.nome).replace(/\(exemplo\)/i,'').trim().split(' ')[0]+'! O desenho do projeto "'+p.titulo+'" está pronto para a sua aprovação. É só abrir o link, ver o PDF e tocar em Aprovar ou Pedir ajuste:\n'+url+'\n\nDavid · Saints Projetos';
+    var o=clone(p);o.aprovEnv=TD();delete o.aprovCli;put('prj',o);if(ui.draft&&ui.draft.id===id){ui.draft=clone(o);renderModal();}window.open(waHref(c,msg),'_blank');return;}
+});
 
 /* ---- cliques, mudanças e teclas das novas funções ---- */
 document.addEventListener('click',function(e){
