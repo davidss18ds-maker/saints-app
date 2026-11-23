@@ -396,9 +396,9 @@ td:first-child{white-space:nowrap}
 <input type="file" id="imp" accept=".json,application/json" hidden>
 <script>
 (function(){
-var LS='saints-erp-v1',COLS=['cli','srv','orc','prj','tit','log','rcr','tar','ctr','anx','forn','vrf','lead','evt','bib','eqp'];
+var LS='saints-erp-v1',COLS=['cli','srv','orc','prj','tit','log','rcr','tar','ctr','anx','forn','vrf','lead','evt','bib','eqp','prs'];
 var ME={adm:true,lvl:'Dono'},ADMC=['srv','orc','tit','rcr','ctr'];
-var D={cli:{},srv:{},orc:{},prj:{},tit:{},log:{},rcr:{},tar:{},ctr:{},anx:{},forn:{},vrf:{},lead:{},evt:{},bib:{},eqp:{}},CFG=null,mode='local',dbRef=null,dlRef=null,queue={};
+var D={cli:{},srv:{},orc:{},prj:{},tit:{},log:{},rcr:{},tar:{},ctr:{},anx:{},forn:{},vrf:{},lead:{},evt:{},bib:{},eqp:{},prs:{}},CFG=null,mode='local',dbRef=null,dlRef=null,queue={};
 var ui={view:'painel',modal:null,draft:null,filt:{orc:'todos',rec:'abertos',pag:'abertos',prj:''},q:{},arm:false,gq:''};
 var $=function(s){return document.querySelector(s);};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
@@ -1094,19 +1094,19 @@ function vAcc(){
   return meu+tb+how;
 }
 /* ---------- render principal ---------- */
-var NAV=[['','Visão geral'],['painel','Painel','◔'],['auto','Automação','⚡'],['','Comercial'],['orc','Orçamentos','▤'],['funil','Funil de vendas','⇶'],['preco','Calculadora de preço','∑'],['ctr','Contratos','§'],['cli','Clientes','☺'],['vrf','Análise de clientes','⛨'],['msg','Modelos de mensagem','✉'],['srv','Ficha técnica','☰'],['','Operação'],['prj','Projetos','◧'],['rot','Tarefas e rotinas','✓'],['bib','Normas e padrões','⌘'],['eqp','Equipamentos e licenças','⚙'],['','Financeiro'],['rec','A receber','↓'],['fisc','Fiscal e notas','▣'],['pag','A pagar','↑'],['forn','Fornecedores','⛁'],['conc','Conciliação bancária','⇄'],['pj','Equipe PJ','◈'],['clt','CLT e encargos','⚖'],['','Gestão'],['mes','Painel do mês','◷'],['rel','Relatórios','▥'],['xls','Excel','⊞'],['','Análises'],['agenda','Agenda','▦'],['caixa','Fluxo de caixa','≈'],['rent','Rentabilidade','◍'],['radar','Radar de clientes','◎'],['','Conta'],['acc','Acessos','⚿'],['nuvem','Nuvem e logins','☁'],['seg','Senha e backup','🔒'],['site','Site da Saints Projetos','↗']];
+var NAV=[['','Visão geral'],['painel','Painel','◔'],['auto','Automação','⚡'],['','Comercial'],['orc','Orçamentos','▤'],['funil','Funil de vendas','⇶'],['prs','Prospecção','⌖'],['preco','Calculadora de preço','∑'],['ctr','Contratos','§'],['cli','Clientes','☺'],['vrf','Análise de clientes','⛨'],['msg','Modelos de mensagem','✉'],['srv','Ficha técnica','☰'],['','Operação'],['prj','Projetos','◧'],['rot','Tarefas e rotinas','✓'],['bib','Normas e padrões','⌘'],['eqp','Equipamentos e licenças','⚙'],['','Financeiro'],['rec','A receber','↓'],['fisc','Fiscal e notas','▣'],['pag','A pagar','↑'],['forn','Fornecedores','⛁'],['conc','Conciliação bancária','⇄'],['pj','Equipe PJ','◈'],['clt','CLT e encargos','⚖'],['','Gestão'],['mes','Painel do mês','◷'],['rel','Relatórios','▥'],['xls','Excel','⊞'],['','Análises'],['agenda','Agenda','▦'],['caixa','Fluxo de caixa','≈'],['rent','Rentabilidade','◍'],['radar','Radar de clientes','◎'],['','Conta'],['acc','Acessos','⚿'],['nuvem','Nuvem e logins','☁'],['seg','Senha e backup','🔒'],['site','Site da Saints Projetos','↗']];
 var NAVCOL=['prj','rot','agenda','cli','acc','site'];
 var SITE_PADRAO='https://claude.ai/artifact/1mbMGFD48KwDhhGzdR35Fd#play-15dd8cd198dd';
 function siteUrl(){var u=String((CFG&&CFG.site)||SITE_PADRAO||'').trim();if(u&&!/^https?:\/\//i.test(u)){u='https://'+u;}return u;}
 function navOk(k){return ME.adm||NAVCOL.indexOf(k)>=0;}
-var TTL={painel:'Painel',auto:'Automação',orc:'Orçamentos',cli:'Clientes',srv:'Ficha técnica de serviços',prj:'Projetos',rec:'Contas a receber',pag:'Contas a pagar',rel:'Relatórios',rot:'Tarefas e rotinas',ctr:'Contratos',fisc:'Fiscal e notas',ia:'Pergunte ao ERP',agenda:'Agenda',caixa:'Fluxo de caixa projetado',rent:'Rentabilidade e preço',radar:'Radar de clientes',meta:'Metas e capacidade',acc:'Acessos e equipe',pj:'Equipe PJ',clt:'CLT e encargos',forn:'Fornecedores',vrf:'Análise de clientes',funil:'Funil de vendas',preco:'Calculadora de preço',msg:'Modelos de mensagem',bib:'Normas e padrões',eqp:'Equipamentos e licenças',conc:'Conciliação bancária',mes:'Painel do mês',xls:'Excel',seg:'Senha e backup',nuvem:'Nuvem e logins'};
-function cnt(v){if(v==='orc'){return L('orc').filter(function(o){return o.status==='enviado';}).length;}if(v==='prj'){return L('prj').filter(function(p){return p.status!=='entregue';}).length;}if(v==='rec'){return L('tit').filter(function(t){return t.tipo==='R'&&tstat(t)==='vencido';}).length;}if(v==='rot'){return tdue();}if(v==='ctr'){return L('ctr').filter(function(c){return c.status==='rascunho'||c.status==='enviado';}).length;}if(v==='auto'){return ao('alerta')?pend().length:0;}if(v==='funil'){return leadFU().length;}if(v==='eqp'){return eqpAlert().length;}if(v==='pj'){return L('tit').filter(function(t){return isPJ(t)&&tstat(t)==='pago'&&!t.nf&&!pjNotas(t.id).length;}).length;}return 0;}
+var TTL={painel:'Painel',auto:'Automação',orc:'Orçamentos',cli:'Clientes',srv:'Ficha técnica de serviços',prj:'Projetos',rec:'Contas a receber',pag:'Contas a pagar',rel:'Relatórios',rot:'Tarefas e rotinas',ctr:'Contratos',fisc:'Fiscal e notas',ia:'Pergunte ao ERP',agenda:'Agenda',caixa:'Fluxo de caixa projetado',rent:'Rentabilidade e preço',radar:'Radar de clientes',meta:'Metas e capacidade',acc:'Acessos e equipe',pj:'Equipe PJ',clt:'CLT e encargos',forn:'Fornecedores',vrf:'Análise de clientes',funil:'Funil de vendas',prs:'Prospecção',preco:'Calculadora de preço',msg:'Modelos de mensagem',bib:'Normas e padrões',eqp:'Equipamentos e licenças',conc:'Conciliação bancária',mes:'Painel do mês',xls:'Excel',seg:'Senha e backup',nuvem:'Nuvem e logins'};
+function cnt(v){if(v==='orc'){return L('orc').filter(function(o){return o.status==='enviado';}).length;}if(v==='prj'){return L('prj').filter(function(p){return p.status!=='entregue';}).length;}if(v==='rec'){return L('tit').filter(function(t){return t.tipo==='R'&&tstat(t)==='vencido';}).length;}if(v==='rot'){return tdue();}if(v==='ctr'){return L('ctr').filter(function(c){return c.status==='rascunho'||c.status==='enviado';}).length;}if(v==='auto'){return ao('alerta')?pend().length:0;}if(v==='funil'){return leadFU().length;}if(v==='prs'){return prsFU().length;}if(v==='eqp'){return eqpAlert().length;}if(v==='pj'){return L('tit').filter(function(t){return isPJ(t)&&tstat(t)==='pago'&&!t.nf&&!pjNotas(t.id).length;}).length;}return 0;}
 function render(){
   if(!navOk(ui.view)){ui.view='prj';}
   var nv=NAV.filter(function(n){return !n[2]||navOk(n[0]);}).filter(function(n,i,a){return n[2]||(a[i+1]&&a[i+1][2]);});
   $('#nav').innerHTML=nv.map(function(n){if(!n[2]){return '<div class="grp">'+n[1]+'</div>';}if(n[0]==='site'&&siteUrl()){return '<a class="nv" style="text-decoration:none" href="'+esc(siteUrl())+'" target="_blank" rel="noopener"><i>'+n[2]+'</i>'+n[1]+'</a>';}var c=cnt(n[0]);return '<button class="nv" data-nav="'+n[0]+'"'+(ui.view===n[0]?' aria-current="page"':'')+'><i>'+n[2]+'</i>'+n[1]+(c?'<em>'+c+'</em>':'')+'</button>';}).join('');
   $('#ttl').textContent=TTL[ui.view];
-  var v=ui.view;$('#view').innerHTML=v==='painel'?vPainelX():v==='orc'?vOrc():v==='cli'?vCli():v==='srv'?vSrv():v==='prj'?vPrj():v==='rec'?vFin('R'):v==='pag'?vFin('P'):v==='pj'?vPJ():v==='clt'?vCLT():v==='forn'?vForn():v==='vrf'?vVrf():v==='rel'?vRel():v==='rot'?vRot():v==='ctr'?vCtr():v==='fisc'?vFisc():v==='ia'?vIA():v==='agenda'?evtBox()+vAgenda():v==='funil'?vFunil():v==='preco'?vPreco():v==='msg'?vMsg():v==='bib'?vBib():v==='eqp'?vEqp():v==='conc'?vConc():v==='mes'?vMes():v==='xls'?vXls():v==='seg'?vSeg():v==='caixa'?vCaixa():v==='rent'?vRent():v==='radar'?vRadar():v==='meta'?vMeta()+conqHtml(true):v==='acc'?vAccFb():v==='nuvem'?vNuvem():vAuto();
+  var v=ui.view;$('#view').innerHTML=v==='painel'?vPainelX():v==='orc'?vOrc():v==='cli'?vCli():v==='srv'?vSrv():v==='prj'?vPrj():v==='rec'?vFin('R'):v==='pag'?vFin('P'):v==='pj'?vPJ():v==='clt'?vCLT():v==='forn'?vForn():v==='vrf'?vVrf():v==='rel'?vRel():v==='rot'?vRot():v==='ctr'?vCtr():v==='fisc'?vFisc():v==='ia'?vIA():v==='agenda'?evtBox()+vAgenda():v==='funil'?vFunil():v==='prs'?vPrs():v==='preco'?vPreco():v==='msg'?vMsg():v==='bib'?vBib():v==='eqp'?vEqp():v==='conc'?vConc():v==='mes'?vMes():v==='xls'?vXls():v==='seg'?vSeg():v==='caixa'?vCaixa():v==='rent'?vRent():v==='radar'?vRadar():v==='meta'?vMeta()+conqHtml(true):v==='acc'?vAccFb():v==='nuvem'?vNuvem():vAuto();
   if(!ME.adm){var nb=document.querySelectorAll('[data-new="prj"]');for(var z=0;z<nb.length;z++){nb[z].remove();}}
   renderBanner();tabbarRender();bkNag();
 }
@@ -1320,7 +1320,7 @@ function vPainelX(){
   var hello=top.slice(0,iM),parts={minis:top.slice(iM,iP),prio:top.slice(iP)},g=rest.split('<div class="g2">');
   parts.kpis=g[0];parts.caixa=g[1]?'<div class="g2">'+g[1]:'';parts.funil=g[2]?'<div class="g2">'+g[2]:'';parts.semana=semanaHtml();
   hello=hello.replace('</div></div>','</div><div class="hbtn"><button class="btn ghost sm" type="button" data-fab="orc">+ Orçamento</button><button class="btn ghost sm" type="button" data-pcfg="1">⚙ Personalizar</button></div></div>');
-  var c=painelCfg();return hello+minhasBox()+c.ordem.filter(function(k){return c.ocultos.indexOf(k)<0;}).map(function(k){return parts[k]||'';}).join('');
+  var c=painelCfg();return hello+minhasBox()+prsBox()+c.ordem.filter(function(k){return c.ocultos.indexOf(k)<0;}).map(function(k){return parts[k]||'';}).join('');
 }
 function pcfgOpen(){var c=painelCfg();m2(m2head('Personalizar painel','Deixe em cima o que você olha todo dia')+c.ordem.map(function(k,i){var n=PAINEL.filter(function(p){return p[0]===k;})[0][1],on=c.ocultos.indexOf(k)<0;return '<div class="sw"><div><b>'+n+'</b></div><button class="btn ghost sm" type="button" data-pmv="'+k+':-1" '+(i?'':'disabled')+' aria-label="Subir">↑</button><button class="btn ghost sm" type="button" data-pmv="'+k+':1" '+(i<c.ordem.length-1?'':'disabled')+' aria-label="Descer">↓</button><button class="tg" type="button" role="switch" aria-checked="'+on+'" data-pon="'+k+'" aria-label="Mostrar '+n+'"></button></div>';}).join('')+'<div class="foot"><button class="btn" type="button" data-m2x="1">Pronto</button><button class="btn ghost" type="button" data-preset="1">Voltar ao padrão</button></div>','pcfg');}
 
@@ -2573,6 +2573,90 @@ document.addEventListener('click',function(ev){var t=ev.target,b;
     var o=clone(p);o.aprovEnv=TD();delete o.aprovCli;put('prj',o);if(ui.draft&&ui.draft.id===id){ui.draft=clone(o);renderModal();}window.open(waHref(c,msg),'_blank');return;}
 });
 
+/* v27: Prospecção de clientes com Google Maps */
+var PRST=[['nova','A contatar','info'],['msg','Mensagem enviada','warn'],['resp','Respondeu','warn'],['cli','Virou cliente','ok'],['nao','Sem interesse','bad']];
+var PRTP=[['serr','Serralheria','serralheria'],['marc','Marcenaria','marcenaria'],['met','Metalúrgica','metalúrgica'],['cald','Caldeiraria','caldeiraria'],['usin','Tornearia / usinagem','usinagem'],['est','Estruturas metálicas','estrutura metálica'],['arq','Arquitetura / design','escritório de arquitetura'],['ind','Indústria','indústria'],['out','Outro','']];
+var PRSM1='Olá! Tudo bem? Sou o David, da Saints Projetos. Faço desenhos técnicos e projetos 2D/3D em SolidWorks e AutoCAD para {tipo}: detalhamento para fabricação, arquivos DXF para corte e conversão de croquis para CAD. Posso te mandar alguns exemplos do meu trabalho? {site}';
+var PRSM2='Olá! Aqui é o David, da Saints Projetos. Passando só para deixar meu contato: quando precisar de desenho técnico ou DXF para corte, é só me chamar. Obrigado!';
+SITE_PADRAO='https://davidss18ds-maker.github.io/saints-app/site.html';
+var siteUrl0=siteUrl;siteUrl=function(){var u=siteUrl0();return /claude\.ai\//.test(u)?SITE_PADRAO:u;};
+if(!ORIG.some(function(o){return o[0]==='Prospecção';})){ORIG.push(['Prospecção','Prospecção']);}
+function prsTp(k){return PRTP.filter(function(x){return x[0]===k;})[0]||PRTP[PRTP.length-1];}
+function prsSt(k){return PRST.filter(function(x){return x[0]===k;})[0]||PRST[0];}
+function prsFU(){return L('prs').filter(function(p){return (p.status==='msg'||p.status==='resp')&&p.prox&&p.prox<=TD();});}
+function prsNova(){return L('prs').filter(function(p){return p.status==='nova';});}
+function prsSemana(){var d=new Date(TD()+'T12:00:00'),k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);var ini=d.toISOString().slice(0,10);return L('prs').reduce(function(s,p){return s+(p.hist||[]).filter(function(h){return h.t==='msg'&&h.d>=ini;}).length;},0);}
+function prsMeta(){return Math.max(1,num(CFG.prsMeta)||10);}
+function prsCid(){return CFG.prsCid||'São Paulo';}
+function prsMapsQ(q){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
+function prsMapsLink(p){return p.maps||prsMapsQ(p.nome+(p.end?' '+p.end:' '+prsCid()));}
+function prsMsg(p,k){var t=k===2?(CFG.prsMsg2||PRSM2):(CFG.prsMsg1||PRSM1),tp=prsTp(p.tipo);var plural=tp[0]==='out'?'empresas como a sua':(tp[0]==='arq'?'escritórios de arquitetura':tp[0]==='ind'?'indústrias':tp[0]==='est'?'empresas de estruturas metálicas':tp[0]==='usin'?'tornearias e usinagens':tp[1].toLowerCase().replace(/ia$/,'ias').replace(/ica$/,'icas'));
+  return t.replace(/\{tipo\}/g,plural).replace(/\{nome\}/g,p.nome||'').replace(/\{site\}/g,siteUrl()?'Site: '+siteUrl():'').trim();}
+function prsGuess(n){n=nmNorm(n);return /serralher/.test(n)?'serr':/marcen|movei/.test(n)?'marc':/caldeir/.test(n)?'cald':/tornear|usinag/.test(n)?'usin':/estrutur/.test(n)?'est':/metalurg|metal/.test(n)?'met':/arquit|design|interior/.test(n)?'arq':/industr/.test(n)?'ind':'out';}
+function prsParse(title,text,url){var all=[title,text,url].filter(Boolean).join('\n'),u=(all.match(/https?:\/\/\S+/)||[''])[0];
+  var ls=all.split(/\n/).map(function(x){return x.trim();}).filter(function(x){return x&&!/^https?:\/\//.test(x);});
+  var nome=(title&&!/^https?:/.test(title)?title.trim():'')||ls[0]||'';
+  var end=ls.filter(function(x){return x!==nome&&/\d/.test(x)&&/(^r\.|rua|av\.|avenida|estr|rod\.|rodovia|al\.|alameda|travessa|pra[cç]a|\d{5}-?\d{3}|- [A-Z]{2}\b)/i.test(x);})[0]||'';
+  var tl=(all.replace(/https?:\/\/\S+/g,'').match(/\(?\d{2}\)?\s?9?\d{4}[-\s]?\d{4}/)||[''])[0];
+  return {nome:nome.replace(/\s+/g,' ').slice(0,90),end:end,maps:u,tel:tl,tipo:prsGuess(nome)};}
+function prsDup(o){var n=nmNorm(o.nome);return L('prs').filter(function(p){return (o.maps&&p.maps===o.maps)||(n&&nmNorm(p.nome)===n);})[0];}
+function prsAddFrom(o){if(!o.nome){toast('Não encontrei o nome da empresa. Preencha à mão.');prsForm(null,o);return;}var d=prsDup(o);if(d){toast('Essa empresa já está na sua lista.');prsForm(d);return;}prsForm(null,o);}
+/* ---- tela ---- */
+function vPrs(){var ls=L('prs'),f=ui.prsf||'ativos',fu=prsFU(),sem=prsSemana(),meta=prsMeta();
+  var it=ls.filter(function(p){return f==='todos'?true:f==='ativos'?(p.status==='nova'||p.status==='msg'||p.status==='resp'):p.status===f;}).sort(function(a,b){var o={resp:0,msg:1,nova:2,cli:3,nao:4};var la=(a.prox&&a.prox<=TD())?0:1,lb=(b.prox&&b.prox<=TD())?0:1;return (o[a.status]-o[b.status])||(la-lb)||String(a.prox||'9').localeCompare(String(b.prox||'9'))||String(a.nome).localeCompare(String(b.nome));});
+  var cnt=function(k){return ls.filter(function(p){return p.status===k;}).length;};
+  return '<div class="tools"><span class="sp"></span><button class="btn" data-prsnew="1">+ Empresa</button></div>'+
+  '<div class="pjk" style="margin-bottom:14px"><div><small>A contatar</small><b>'+cnt('nova')+'</b></div><div><small>Retornar hoje</small><b style="color:var(--'+(fu.length?'bad':'ok')+')">'+fu.length+'</b></div><div><small>Meta da semana</small><b style="color:var(--'+(sem>=meta?'ok':'warn')+')">'+sem+'/'+meta+'</b></div></div>'+
+  '<div class="panel" style="margin-bottom:14px"><h2>🗺 Buscar empresas no Google Maps</h2><p class="note" style="margin:8px 0 10px">Toque num tipo para abrir o Maps. Achou uma empresa? Toque nela → <b>Compartilhar</b> → <b>Saints ERP</b>, e ela entra aqui sozinha.</p>'+
+  '<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><span style="font-size:13px;color:var(--muted)">Região</span><input id="prs_cid" value="'+esc(prsCid())+'" style="flex:1;min-width:0"></div>'+
+  '<div class="tools" style="margin:0">'+PRTP.filter(function(x){return x[2];}).map(function(x){return '<button class="chip" type="button" data-prsbusca="'+x[0]+'">'+esc(x[1].split(' /')[0])+'</button>';}).join('')+'</div>'+
+  '<details style="margin-top:12px"><summary style="font-size:14px;font-weight:700;cursor:pointer">Não aparece o Saints ERP ao compartilhar?</summary><p class="note" style="margin:8px 0">No Maps, toque em <b>Compartilhar → Copiar</b>, cole aqui e toque em Adicionar.</p><textarea id="prs_cola" rows="3" placeholder="Cole aqui o que copiou do Maps"></textarea><div class="foot" style="margin-top:8px"><button class="btn sm" type="button" data-prscola="1">Adicionar</button></div><p class="note" style="margin:8px 0 0">Para o Saints ERP aparecer na lista de compartilhar, o app precisa estar instalado na tela inicial (já atualizado).</p></details></div>'+
+  '<div class="tools" style="margin-bottom:6px">'+[['ativos','Em andamento'],['nova','A contatar ('+cnt('nova')+')'],['msg','Enviadas ('+cnt('msg')+')'],['resp','Responderam ('+cnt('resp')+')'],['cli','Clientes ('+cnt('cli')+')'],['nao','Sem interesse ('+cnt('nao')+')'],['todos','Todas']].map(function(x){return '<button class="chip" data-prsf="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>';}).join('')+'</div>'+
+  '<div class="panel" style="margin-bottom:14px">'+(it.length?it.map(prsRow).join(''):'<p class="note" style="margin:0">'+(ls.length?'Nenhuma empresa neste filtro.':'Sua lista está vazia. Use a busca no Maps acima para começar.')+'</p>')+'</div>'+
+  '<details class="panel" style="margin-bottom:14px"><summary style="font-weight:800;cursor:pointer">✉ Mensagens e meta</summary><p class="note" style="margin:10px 0 8px">Use {tipo} e {site}: o app troca pelo tipo da empresa e pelo link do seu site.</p>'+fld('Primeira mensagem','<textarea data-prscfg="prsMsg1" rows="5">'+esc(CFG.prsMsg1||PRSM1)+'</textarea>')+fld('Mensagem de retorno (follow-up)','<textarea data-prscfg="prsMsg2" rows="3">'+esc(CFG.prsMsg2||PRSM2)+'</textarea>')+fld('Meta de mensagens por semana','<input data-prscfg="prsMeta" inputmode="numeric" value="'+prsMeta()+'">')+'</details>';}
+function prsRow(p){var st=prsSt(p.status),tp=prsTp(p.tipo),late=p.prox&&p.prox<=TD()&&(p.status==='msg'||p.status==='resp'),ab=p.status==='nova'||p.status==='msg'||p.status==='resp';
+  var wa=tel(p)&&ab?'<button class="btn '+(p.status==='nova'||late?'':'ghost ')+'sm" type="button" data-prswa="'+p.id+'">'+(p.status==='nova'?'💬 Mandar mensagem':'💬 Retornar')+'</button>':'';
+  return '<div class="pjr"><button type="button" class="pjm" data-prsed="'+p.id+'"><b>'+esc(p.nome)+'</b><span>'+tag(st[1],st[2])+' '+esc(tp[1])+(p.end?' · '+esc(String(p.end).split(',').slice(0,2).join(',')):'')+'</span>'+(ab&&p.prox&&p.status!=='nova'?'<span class="'+(late?'bad':'')+'">'+(late?'⚠ Retornar hoje':'Retornar em '+fd(p.prox))+'</span>':'')+(!tel(p)&&ab?'<span>Sem WhatsApp: abra no Maps para ver o telefone</span>':'')+'</button><div class="ldbt">'+wa+'<a class="btn ghost sm" target="_blank" rel="noopener" href="'+esc(prsMapsLink(p))+'">Maps</a></div></div>';}
+function prsForm(p,pre){var n=!p;p=p||Object.assign({id:uid(),nome:'',tipo:'out',tel:'',end:'',maps:'',site:'',status:'nova',prox:'',obs:'',hist:[],criado:TD()},pre||{});
+  var hs=(p.hist||[]).slice().reverse().slice(0,6);
+  m2(m2head(n?'Nova empresa':p.nome,n?'Prospecção':prsSt(p.status)[1])+'<div class="fg">'+fld('Nome da empresa','<input id="ps_nome" value="'+esc(p.nome)+'">')+fld('Tipo','<select id="ps_tipo">'+sOpts(PRTP.map(function(x){return [x[0],x[1]];}),p.tipo)+'</select>')+fld('WhatsApp / telefone','<input id="ps_tel" inputmode="tel" value="'+esc(p.tel)+'" placeholder="(11) 90000-0000">')+fld('Situação','<select id="ps_st">'+sOpts(PRST.map(function(x){return [x[0],x[1]];}),p.status)+'</select>')+fld('Endereço','<input id="ps_end" value="'+esc(p.end)+'">')+fld('Próximo contato','<input id="ps_prox" type="date" value="'+esc(p.prox||'')+'">')+fld('Link do Maps','<input id="ps_maps" value="'+esc(p.maps)+'" placeholder="https://maps.app.goo.gl/…">')+fld('Instagram ou site','<input id="ps_site" value="'+esc(p.site||'')+'">')+'</div><div class="sec">'+fld('Anotações','<textarea id="ps_obs" rows="3" placeholder="Com quem falou, o que fabricam, se usam DXF…">'+esc(p.obs||'')+'</textarea>')+'</div>'+
+  (hs.length?'<div class="sec"><h4>Histórico</h4>'+hs.map(function(h){return '<div style="font-size:13px;padding:3px 0"><b>'+fd(h.d)+'</b> · '+esc(h.txt)+'</div>';}).join('')+'</div>':'')+
+  '<div class="foot">'+(n?'':delBtn('data-prsdel',p.id))+'<a class="btn ghost" target="_blank" rel="noopener" href="'+esc(prsMapsLink(p))+'">Abrir no Maps</a>'+(n||p.status==='cli'?'':'<button class="btn ghost" type="button" data-prscli="'+p.id+'">✓ Virou cliente</button>')+'<button class="btn" type="button" data-prssave="'+p.id+'">Salvar</button></div>','prs');}
+function prsRead(id){var old=D.prs[id]||{criado:TD(),hist:[]};var o={id:id,nome:m2in('ps_nome'),tipo:m2in('ps_tipo'),tel:m2in('ps_tel'),status:m2in('ps_st')||'nova',end:m2in('ps_end'),prox:m2in('ps_prox'),maps:m2in('ps_maps'),site:m2in('ps_site'),obs:m2in('ps_obs'),criado:old.criado,hist:(old.hist||[]).slice(),cliId:old.cliId};
+  if(old.status&&old.status!==o.status){o.hist.push({d:TD(),t:'st',txt:'Situação: '+prsSt(o.status)[1]});}if(!old.status){o.hist.push({d:TD(),t:'add',txt:'Adicionada à lista'});}return o;}
+function prsVirou(id){var p=clone(D.prs[id]);if(!p){return;}var cid=leadCli({nome:p.nome,tel:p.tel,obs:'Veio da prospecção · '+prsTp(p.tipo)[1]+(p.end?' · '+p.end:''),origem:'Prospecção'});
+  var l={id:uid(),nome:p.nome,tel:p.tel||'',email:'',origem:'Prospecção',etapa:'contato',valor:'',prox:plusU(1),obs:'Veio da prospecção · '+prsTp(p.tipo)[1]+(p.obs?' · '+p.obs:''),cliId:cid,criado:TD()};put('lead',l);
+  p.status='cli';p.cliId=cid;p.hist=(p.hist||[]).concat([{d:TD(),t:'cli',txt:'Virou cliente e entrou no Funil'}]);put('prs',p);addLog('Prospecção virou cliente: '+p.nome);m2close();render();toast('🎉 '+p.nome+' agora é cliente e está no Funil de vendas.');}
+/* ---- Painel ---- */
+function prsBox(){if(!(typeof podeVer!=='function'||podeVer('prs'))){return '';}var ls=L('prs');if(!ls.length){return '';}var fu=prsFU(),nv=prsNova().length,sem=prsSemana(),meta=prsMeta();if(!fu.length&&!nv&&sem>=meta){return '';}
+  return '<div class="panel" style="margin-bottom:14px"><h2>🎯 Prospecção</h2><p style="margin:10px 0 8px;font-size:14px">'+(fu.length?'<b style="color:var(--bad)">'+fu.length+' empresa(s) para retornar hoje.</b> ':'')+(nv?nv+' na lista para mandar a primeira mensagem. ':'')+'Esta semana: <b>'+sem+' de '+meta+'</b> mensagens.</p><div class="hbar"><i style="width:'+Math.min(100,Math.round(sem/meta*100))+'%"></i></div><div class="foot" style="margin-top:10px"><button class="btn sm" data-nav="prs">Abrir prospecção</button></div></div>';}
+function podeVer(v){try{if(typeof FB==='undefined'||!FB.on||FB.perf==='admin'){return true;}return (PNAV[FB.perf]||[]).indexOf(v)>=0;}catch(e){return true;}}
+/* ---- permissões: analista administrativa também prospecta ---- */
+try{PNAV.adm.splice(PNAV.adm.indexOf('funil')+1,0,'prs');PR.adm.push('prs');PW.adm.push('prs');}catch(e){}
+/* ---- receber empresa compartilhada pelo Google Maps (Android) ---- */
+(function(){try{var q=new URLSearchParams(location.search);if(q.has('prs')||q.has('text')||q.has('title')){var o={title:q.get('title')||'',text:q.get('text')||'',url:q.get('url')||''};if(o.title||o.text||o.url){sessionStorage.setItem('prsShare',JSON.stringify(o));}history.replaceState(null,'',location.pathname);}}catch(e){}})();
+(function(){var n=0,tk=setInterval(function(){n++;var raw=null;try{raw=sessionStorage.getItem('prsShare');}catch(e){}if(!raw||n>240){clearInterval(tk);return;}
+  if(!document.getElementById('view')||document.querySelector('.lockov')||document.getElementById('fblf')||typeof D==='undefined'||!D.prs){return;}
+  if(!podeVer('prs')){clearInterval(tk);try{sessionStorage.removeItem('prsShare');}catch(e){}return;}
+  clearInterval(tk);try{sessionStorage.removeItem('prsShare');}catch(e){}var o=JSON.parse(raw);ui.view='prs';render();prsAddFrom(prsParse(o.title,o.text,o.url));},500);})();
+/* ---- cliques e mudanças ---- */
+document.addEventListener('click',function(ev){var t=ev.target,b;if(!t.closest){return;}
+  if(t.closest('[data-prsnew]')){prsForm(null);return;}
+  if((b=t.closest('[data-prsf]'))){ui.prsf=b.dataset.prsf;render();return;}
+  if((b=t.closest('[data-prsed]'))){prsForm(D.prs[b.dataset.prsed]);return;}
+  if((b=t.closest('[data-prsbusca]'))){var tp=prsTp(b.dataset.prsbusca),cid=(document.getElementById('prs_cid')||{}).value||prsCid();window.open(prsMapsQ(tp[2]+' em '+cid),'_blank');return;}
+  if(t.closest('[data-prscola]')){var tx=(document.getElementById('prs_cola')||{}).value||'';if(!tx.trim()){toast('Cole primeiro o texto do Maps.');return;}prsAddFrom(prsParse('',tx,''));return;}
+  if((b=t.closest('[data-prssave]'))){var o=prsRead(b.dataset.prssave);if(!o.nome){toast('Coloque o nome da empresa.');return;}if(!D.prs[o.id]){var dp=prsDup(o);if(dp){toast('Essa empresa já está na lista.');prsForm(dp);return;}}put('prs',o);m2close();render();toast('Empresa salva');return;}
+  if((b=t.closest('[data-prsdel]'))){var id=b.dataset.prsdel;desf('Empresa excluída',function(){del('prs',id);});m2close();render();return;}
+  if((b=t.closest('[data-prscli]'))){prsVirou(b.dataset.prscli);return;}
+  if((b=t.closest('[data-prswa]'))){var p=clone(D.prs[b.dataset.prswa]);if(!p){return;}var k=p.status==='nova'?1:2;window.open(waHref(p,prsMsg(p,k)),'_blank');
+    if(p.status==='nova'){p.status='msg';}p.prox=plusU(k===1?4:7);p.hist=(p.hist||[]).concat([{d:TD(),t:'msg',txt:k===1?'Primeira mensagem enviada':'Mensagem de retorno enviada'}]);put('prs',p);render();toast('Anotado! Lembro você de retornar em '+fd(p.prox)+'.');return;}
+});
+document.addEventListener('change',function(ev){var t=ev.target;if(!t||!t.dataset){return;}
+  if(t.id==='prs_cid'){CFG.prsCid=t.value.trim()||'São Paulo';saveCfg();return;}
+  if(t.dataset.prscfg){var k=t.dataset.prscfg;CFG[k]=k==='prsMeta'?Math.max(1,parseInt(t.value,10)||10):t.value;saveCfg();toast('Salvo');return;}
+});
+
 /* ---- cliques, mudanças e teclas das novas funções ---- */
 document.addEventListener('click',function(e){
   var t=e.target,b,fm=$('#fabm');
@@ -2631,7 +2715,7 @@ if(hasC){
         else{var m={};snap.docs.forEach(function(d){m[d.id]=d.data();});D[c]=m;}
         if(!first[c]){first[c]=1;ready++;if(ready===all.length){clearTimeout(timer);setSync(ME.adm?'Salvo na nuvem':'Salvo na nuvem · acesso de '+ME.lvl.toLowerCase(),false);obxReplay();if(ME.adm){if(!(!L('cli').length&&!L('orc').length&&!CFG.seed5&&importSeed())){if(!L('srv').length&&!CFG.seeded){seedSrv();}setTimeout(function(){autoRun(false);},400);}}}}
         render();
-      },function(){clearTimeout(timer);mode='local';ME.adm=true;D={cli:{},srv:{},orc:{},prj:{},tit:{},log:{},rcr:{},tar:{},ctr:{},anx:{},forn:{},vrf:{},lead:{},evt:{},bib:{},eqp:{}};loadLocal();setSync('Nuvem indisponível: usando este navegador',true);render();});});
+      },function(){clearTimeout(timer);mode='local';ME.adm=true;D={cli:{},srv:{},orc:{},prj:{},tit:{},log:{},rcr:{},tar:{},ctr:{},anx:{},forn:{},vrf:{},lead:{},evt:{},bib:{},eqp:{},prs:{}};loadLocal();setSync('Nuvem indisponível: usando este navegador',true);render();});});
     });
   }).catch(function(){setSync('Salvo neste navegador',true);});
 }else{setSync('Salvo neste navegador',true);}
